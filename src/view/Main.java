@@ -5,6 +5,7 @@
  */
 package view;
 
+import facade.FacadeBackend;
 import facade.FacadeFrontend;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +22,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+            FacadeBackend.getInstance().initialize();
             FacadeFrontend.getInstance().initialize(primaryStage, Scenes.SELECT_CAR);
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

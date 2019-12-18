@@ -6,28 +6,54 @@ package util;
  */
 public class Settings {
 
-    public enum Cars{
-        DODGE("carro-preto", "carro-preto-grande"),
-        SKYLINE("carro-branco", "carro-branco-grande"),
-        FERRARI("carro-vermelho", "carro-vermelho-grande"),
-        JAGUAR("carro-azul", "carro-azul-grande"),
-        MERCEDES("carro-cinza", "carro-cinza-grande"),
-        CAMARO("carro-amarelo", "carro-amarelo-grande");
+    public enum SpritesCars{
+        DODGE("black"),
+        SKYLINE("white"),
+        FERRARI("red"),
+        JAGUAR("blue"),
+        MERCEDES("grey"),
+        CAMARO("yellow");
        
         private final String tiny;
         private final String real;
+        private final String ORIGIN = "/res/sprites/cars/";
         
-        private Cars(String tiny, String real){
-            this.tiny = ("/images/"+tiny+".png");
-            this.real = ("/images/"+real+".png");
+        private SpritesCars(String color){
+            this.tiny = (ORIGIN+"small-"+color+".png");
+            this.real = (ORIGIN+color +".png");
         }
         
-        public String getTiny(){
+        public String getSmall(){
             return this.tiny;
         }
         
-        public String getReal(){
+        public String getBig(){
             return this.real;
+        }
+    }
+    
+    public enum SpritesCity{
+        ROAD("road");
+        
+        private final String path;
+        private final String ORIGIN = "/res/sprites/city/";
+        
+        private SpritesCity(String path){
+            this.path = (ORIGIN+path+".jpg");
+        }
+        
+        public String get(){
+            return this.path;
+        }
+    }
+    
+    private enum CityLocation{
+        CHINA("china");
+        
+        private final String name;
+        
+        private CityLocation(String name){
+            this.name = name;
         }
     }
     

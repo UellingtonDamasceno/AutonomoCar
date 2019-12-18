@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 /**
@@ -10,13 +5,26 @@ package model;
  * @author uellington
  */
 public class City {
+
+    private int dx, dy;
     private Road[][] city;
-    
-    public City(){
-        this.city = new Road[10][10];
+
+    public City(int dx, int dy) {
+        this.dx = dx;
+        this.dy = dy;
+        this.city = new Road[dx][dy];
+    }
+
+    public int getDx() {
+        return this.dx;
     }
     
-    public void addRoad(Road road, int i, int j){
+    public int getDy(){
+        return this.dy;
+    }
+
+    public void addRoad(Road road, int i, int j) {
         this.city[i][j] = road;
     }
+
 }

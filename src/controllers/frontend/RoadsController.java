@@ -5,6 +5,7 @@
  */
 package controllers.frontend;
 
+import facade.FacadeBackend;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
@@ -17,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import util.Settings.SpritesCity;
 
 /**
  * FXML Controller class
@@ -35,19 +37,16 @@ public class RoadsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ObservableList<ColumnConstraints> columns = this.gridPane.getColumnConstraints();
-        ObservableList<RowConstraints> row = this.gridPane.getRowConstraints();
-
-        Image image = new Image("/images/sprite-road.jpg");
-        for (int i = 0; i < 10; i++) {
-
-            for (int j = 0; j < 10; j++) {
-                ImageView imageView = new ImageView(image);
-                imageView.setFitHeight(61);
-                imageView.setFitWidth(77);
-                gridPane.add(imageView, i, j);
-            }
-        }
+        this.gridPane.getColumnConstraints().clear();
+        this.gridPane.getRowConstraints().clear();
+        
+        int dx = FacadeBackend.getInstance().getCityDimensionX();
+        int dy = FacadeBackend.getInstance().getCityDimensionY();
+        
+        this.addNColumns(dx);
+        this.addNRows(dy);
+        
+        this.render();
     }
 
     @FXML
@@ -56,6 +55,33 @@ public class RoadsController implements Initializable {
     }
 
     private void render() {
+        int rows = this.gridPane.getRowConstraints().size();
+        int columns = this.gridPane.getColumnConstraints().size();
 
+        Image image = new Image(SpritesCity.ROAD.get());
+        
+        System.out.println("Reder city: " + rows + " x " + columns);
+        System.out.println("Rendering grid X: " + columns + ":: Y: " + rows);
+        
+        for (int i = 0; i < columns; i++) {
+            for (int j = 0; j < rows; j++) {
+                ImageView imageView = new ImageView(image);
+                imageView.setFitHeight(61);
+                imageView.setFitWidth(77);
+                gridPane.add(imageView, i, j);
+            }
+        }
+    }
+
+    private void addNColumns(int columns) {
+        for (int i = 0; i < columns; i++) {
+            this.gridPane.getColumnConstraints().add(new ColumnConstraints());
+        }
+    }
+
+    private void addNRows(int rows) {
+        for (int i = 0; i < rows; i++) {
+            this.gridPane.getRowConstraints().add(new RowConstraints());
+        }
     }
 }
