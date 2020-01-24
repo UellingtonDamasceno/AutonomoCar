@@ -60,12 +60,12 @@
    <right>
       <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
          <children>
-            <Button fx:id="btnNext" disable="true" mnemonicParsing="false" onAction="#next" prefHeight="50.0" prefWidth="120.0" text="Próximo">
+            <Button fx:id="btnNext" disable="true" mnemonicParsing="false" onAction="#setNextScreen" prefHeight="50.0" prefWidth="120.0" text="Próximo">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button mnemonicParsing="false" onAction="#exit" prefHeight="50.0" prefWidth="120.0" text="Sair">
+            <Button mnemonicParsing="false" onAction="#setPreviousScreen" prefHeight="50.0" prefWidth="120.0" text="Voltar">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

@@ -1,8 +1,5 @@
 package model;
 
-import com.sun.javafx.geom.Area;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -10,16 +7,48 @@ import java.util.Observer;
  *
  * @author uellington
  */
-public class Road implements Observer{
-    private List<Car> cars;
-    private Area area;
+public class Road implements Observer {
     
-    public Road(){
-        this.cars = new LinkedList();
+    private String sprite, name;
+
+    private Road previous, next;
+    
+    private int positionX, positionY;
+    
+    
+    public Road(String sprite, int posX, int posY) {
+        this.sprite = sprite;
+        this.positionX = posX;
+        this.positionY = posY;
     }
 
+    public Road getNextRoad(){
+        return this.next;
+    }
+    
+    public Road getPreviousRoad(){
+        return this.previous;
+    }
+    
+    public void setNextRoad(Road next){
+        this.next = next;
+    }
+    
+    public void setPreviousRoad(Road previous){
+        this.previous = previous;
+    }
+    
     @Override
     public void update(Observable o, Object arg) {
-        
+
+    }
+    
+    @Override
+    public boolean equals(Object object){
+      if(object instanceof Road){
+          Road another = (Road) object;
+          return (this.sprite.equals(another.name));
+      }  
+      return false;
     }
 }

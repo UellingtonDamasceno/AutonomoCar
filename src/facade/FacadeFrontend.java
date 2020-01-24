@@ -2,7 +2,6 @@ package facade;
 
 import controllers.frontend.ScreensController;
 import controllers.frontend.StageController;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import util.Settings.Scenes;
@@ -29,17 +28,25 @@ public class FacadeFrontend {
     public void initialize(Stage stage, Scenes scene) throws Exception {
         Parent loadedScreen = this.screensController.loadScreen(scene);
 
-        this.stageController = new StageController(stage, scene.getTitle());
-        this.stageController.changeMainStage(loadedScreen);
+        this.stageController = new StageController(stage);
+        this.stageController.changeMainStage(scene.getTitle(), loadedScreen);
     }
 
     public void changeScreean(Scenes scene) throws Exception {
         Parent loadedScreen = this.screensController.loadScreen(scene);
-        this.stageController.changeMainStage(loadedScreen);
+        this.stageController.changeMainStage(scene.getTitle(), loadedScreen);
     }
 
-    public void showContentAuxStage(Scenes scenes, String name) throws Exception {
-        Parent content = this.screensController.loadScreen(scenes);
-        this.stageController.changeStageContent(name, content);
+    public double getStageHeigth(){
+        return this.stageController.getStageY();
+    }
+    
+    public double getStageWidth(){
+        return this.stageController.getStageX();
+    }
+    
+    public void showContentAuxStage(Scenes scene, String name) throws Exception {
+        Parent content = this.screensController.loadScreen(scene);
+        this.stageController.changeStageContent(name, scene.getTitle(), content);
     }
 }

@@ -1,6 +1,8 @@
 package controllers.backend;
 
+import java.awt.Point;
 import model.Car;
+import util.Settings.SpritesCars;
 
 /**
  *
@@ -12,6 +14,22 @@ public class CarController {
     
     public void setCar(Car car){
         this.car = car;
+    }
+
+    public String getCarSprite(){
+        return this.car.getSprite();
+    }
+    
+    public Car getCar() {
+        return this.car;
+    }
+
+    public Car createCar(SpritesCars selectedCar, Point origin) {
+        switch(selectedCar){
+            default:{
+                return new Car(selectedCar.getSmall(), origin.x, origin.y);
+            }
+        }
     }
     
     

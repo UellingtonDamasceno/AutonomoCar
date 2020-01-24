@@ -2,6 +2,8 @@ package facade;
 
 import controllers.backend.CarController;
 import controllers.backend.CityController;
+import java.awt.Point;
+import model.Car;
 import util.Settings.SpritesCars;
 
 /**
@@ -24,12 +26,20 @@ public class FacadeBackend {
     }
 
     public void initialize(){
-        this.cityController.createCity(10, 10);
+        this.cityController.createCity("Xina",15, 15, 10.0, 10.0, 3);
+    }
+
+    public void createCity(String name, Double height, Double width, int x, int y, int prop) {
+        this.cityController.createCity(name, x, y, height, width, prop);
+    }
+    public void selectCar(SpritesCars selectedCar){
+        Point originPoint = this.cityController.getOriginPoint();
+        Car car = this.carController.createCar(selectedCar, originPoint);
+        this.carController.setCar(car);
     }
     
-    public void selectCar(SpritesCars selectedCar){
-        
-//        this.carController.setCar(car);
+    public String getSelectedCar(){
+        return this.carController.getCarSprite();
     }
     
     public int getCityDimensionX(){
@@ -39,4 +49,17 @@ public class FacadeBackend {
     public int getCityDimensionY(){
         return this.cityController.getDy();
     }
+    
+    public double getCityHeight(){
+        return this.cityController.getHeight();
+    }
+    
+    public double getCityWidth(){
+        return this.cityController.getWidth();
+    }
+    
+    public void putRoad(String spriteRoad, int x, int y){
+        this.cityController.putRoad(spriteRoad, x, y);
+    }
+
 }

@@ -16,22 +16,24 @@ public class StageController {
     private Map<String, Stage> stages;
     private final Pane container;
 
-    public StageController(Stage mainStage, String titleStage) {
+    public StageController(Stage mainStage) {
         this.stages = new HashMap();
         this.container = new Pane();
-
         this.stages.put("mainStage", mainStage);
-
-        mainStage.setResizable(false);
-        mainStage.setTitle(titleStage);
-
+    }
+    
+    public double getStageY(){
+        return this.stages.get("mainStage").getHeight();
+    }
+    public double getStageX(){
+        return this.stages.get("mainStage").getWidth();
+    }
+    
+    public void changeMainStage(String title, Parent content) {
+        this.changeStageContent("mainStage", title, content);
     }
 
-    public void changeMainStage(Parent content) {
-        this.changeStageContent("mainStage", content);
-    }
-
-    public void changeStageContent(String stageName, Parent newContent) {
+    public void changeStageContent(String stageName, String title,Parent newContent) {
         Stage stage;
         if (this.stages.containsKey(stageName)) {
             stage = stages.get(stageName);
@@ -40,6 +42,7 @@ public class StageController {
             stages.put(stageName, stage);
         }
         stage.setScene(new Scene(newContent));
+        stage.setTitle(title);
         stage.show();
     }
 

@@ -1,14 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers.frontend;
 
 import facade.FacadeBackend;
+import facade.FacadeFrontend;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -32,6 +27,9 @@ public class RoadsController implements Initializable {
     @FXML
     private Label lblCordinates;
 
+    private double heigth;
+    private double width;
+
     /**
      * Initializes the controller class.
      */
@@ -40,12 +38,15 @@ public class RoadsController implements Initializable {
         this.gridPane.getColumnConstraints().clear();
         this.gridPane.getRowConstraints().clear();
         
+        gridPane.setPrefHeight(FacadeBackend.getInstance().getCityHeight());
+        gridPane.setPrefWidth(FacadeBackend.getInstance().getCityWidth());
+        
         int dx = FacadeBackend.getInstance().getCityDimensionX();
         int dy = FacadeBackend.getInstance().getCityDimensionY();
-        
+
         this.addNColumns(dx);
         this.addNRows(dy);
-        
+
         this.render();
     }
 
@@ -58,19 +59,25 @@ public class RoadsController implements Initializable {
         int rows = this.gridPane.getRowConstraints().size();
         int columns = this.gridPane.getColumnConstraints().size();
 
-        Image image = new Image(SpritesCity.ROAD.get());
-        
+        Image image = new Image(SpritesCity.ESCADA.get());
+
         System.out.println("Reder city: " + rows + " x " + columns);
         System.out.println("Rendering grid X: " + columns + ":: Y: " + rows);
-        
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < rows; j++) {
-                ImageView imageView = new ImageView(image);
-                imageView.setFitHeight(61);
-                imageView.setFitWidth(77);
-                gridPane.add(imageView, i, j);
-            }
-        }
+
+        heigth = this.gridPane.getPrefHeight() / rows;
+        width = this.gridPane.getPrefWidth() / columns;
+
+        System.out.println(heigth);
+        System.out.println(width);
+
+//        for (int i = 0; i < columns; i++) {
+//            for (int j = 0; j < rows; j++) {
+//                ImageView imageView = new ImageView(image);
+//                imageView.setFitHeight(heigth);
+//                imageView.setFitWidth(width);
+//                gridPane.add(imageView, i, j);
+//            }
+//        }
     }
 
     private void addNColumns(int columns) {
@@ -83,5 +90,19 @@ public class RoadsController implements Initializable {
         for (int i = 0; i < rows; i++) {
             this.gridPane.getRowConstraints().add(new RowConstraints());
         }
+    }
+
+    private void spawn(String sprite, int x, int y) {
+        Image image = new Image(sprite);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(this.heigth);
+        imageView.setFitWidth(this.width);
+        this.gridPane.add(imageView, x, y);
+    }
+
+    @FXML
+    private void pushCar(MouseEvent event) {
+        String selectedCar = FacadeBackend.getInstance().getSelectedCar();
+        this.spawn(selectedCar, (int)(event.getX()/this.width), (int)(event.getY()/this.heigth));
     }
 }

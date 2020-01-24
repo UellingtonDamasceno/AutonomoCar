@@ -6,75 +6,111 @@ package util;
  */
 public class Settings {
 
-    public enum SpritesCars{
+    public enum SpritesCars {
         DODGE("black"),
         SKYLINE("white"),
         FERRARI("red"),
         JAGUAR("blue"),
         MERCEDES("grey"),
         CAMARO("yellow");
-       
+
         private final String tiny;
         private final String real;
         private final String ORIGIN = "/res/sprites/cars/";
-        
-        private SpritesCars(String color){
-            this.tiny = (ORIGIN+"small-"+color+".png");
-            this.real = (ORIGIN+color +".png");
+
+        private SpritesCars(String color) {
+            this.tiny = (ORIGIN + "small-" + color + ".png");
+            this.real = (ORIGIN + color + ".png");
         }
-        
-        public String getSmall(){
+
+        public String getSmall() {
             return this.tiny;
         }
-        
-        public String getBig(){
+
+        public String getBig() {
             return this.real;
         }
     }
-    
-    public enum SpritesCity{
-        ROAD("road");
-        
+
+    public enum SpritesCity {
+
+        CALCADA("calcada"),
+        FIM_CALCADA("calcada-vertical"),
+        ESCADA("escada"),
+        PAREDE("parede"),
+        PAREDE_2("parede2"),
+        POSTE_1("poste1"),
+        POSTE_2("poste2");
+        //ROAD("road");
+
         private final String path;
         private final String ORIGIN = "/res/sprites/city/";
-        
-        private SpritesCity(String path){
-            this.path = (ORIGIN+path+".jpg");
+
+        private SpritesCity(String path) {
+            this.path = (ORIGIN + path + ".png");
         }
-        
-        public String get(){
+
+        public String get() {
             return this.path;
         }
     }
-    
-    private enum CityLocation{
+
+    public enum CityLocation {
         CHINA("china");
-        
+
         private final String name;
-        
-        private CityLocation(String name){
+
+        private CityLocation(String name) {
             this.name = name;
         }
     }
+
+    public enum RoadsTypes {
+        
+        H(2),
+        L(2),
+        T(3),
+        V(2),
+        X(4);
+        
+        public int maxConnections;
+
+        private RoadsTypes(int maxConnections) {
+            this.maxConnections = maxConnections;
+        }
+        
+        public int getMaxConnections(){
+            return this.maxConnections;
+        }
+    }
     
+    public enum ActionBuilder{
+        CLICK,
+        ROTATE_LEFT,
+        ROTATE_RIGHT;
+    }
+
     public enum Scenes {
+        MAIN("Main.fxml", "Menu", false),
         SELECT_CAR("SelectCar.fxml", "Escolha seu carro", false),
-        ROADS("Roads.fxml", "China", false);
+        BUILDER("Builder.fxml", "Construtor de cidades", false),
+        BUILDER_SETTINGS("BuilderSettings.fxml", "Configurações", false),
+        ROADS("Roads.fxml", "Cidade", false);
         
         private final String name;
         private final String title;
         private final boolean cache;
-        
+
         private Scenes(String value, String title, boolean cache) {
-            this.name = "/view/"+value;
+            this.name = "/view/" + value;
             this.title = title;
             this.cache = cache;
         }
 
-        public String getTitle(){
+        public String getTitle() {
             return this.title;
         }
-        
+
         public boolean isCache() {
             return this.cache;
         }

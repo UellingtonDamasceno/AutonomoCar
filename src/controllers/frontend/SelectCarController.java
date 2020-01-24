@@ -41,6 +41,7 @@ public class SelectCarController implements Initializable {
     private Button btnNext;
 
     private SpritesCars selectedCar;
+
     /**
      * Initializes the controller class.
      *
@@ -52,41 +53,31 @@ public class SelectCarController implements Initializable {
         this.loadImages();
     }
 
-    @FXML
-    private void next(ActionEvent event) {
-        try {
-            FacadeBackend.getInstance().selectCar(selectedCar);
-            FacadeFrontend.getInstance().changeScreean(Scenes.ROADS);
-        } catch (Exception ex) {
-            Logger.getLogger(SelectCarController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     private void loadImages() {
         Image image;
         ImageView imageView;
         int i = 0, j = 0;
         for (SpritesCars car : SpritesCars.values()) {
             System.out.println(car.getSmall() + "[i = " + i + ", j = " + j + "]");
-            
+
             image = new Image(car.getSmall());
             imageView = new ImageView(image);
-            
+
             imageView.setFitWidth(95);
             imageView.setFitHeight(185);
-            
+
             imageView.setOnMouseClicked((MouseEvent event) -> {
                 Platform.runLater(() -> {
                     lblCarName.setText(car.toString());
                     imgRealCar.setImage(new Image(car.getBig()));
                     btnNext.setDisable(false);
                     selectedCar = car;
-                    System.out.println("Selected car: "+ car.name());
+                    System.out.println("Selected car: " + car.name());
                 });
             });
 
             gridPane.add(imageView, j, i);
-            
+
             if (j == 1) {
                 i++;
                 j = -1;
@@ -96,8 +87,22 @@ public class SelectCarController implements Initializable {
     }
 
     @FXML
-    private void exit(ActionEvent event) {
-        System.exit(0);
+    private void setNextScreen(ActionEvent event) {
+        try {
+            FacadeBackend.getInstance().selectCar(selectedCar);
+            FacadeFrontend.getInstance().changeScreean(Scenes.ROADS);
+        } catch (Exception ex) {
+            Logger.getLogger(SelectCarController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void setPreviousScreen(ActionEvent event) {
+        try {
+            FacadeFrontend.getInstance().changeScreean(Scenes.MAIN);
+        } catch (Exception ex) {
+            Logger.getLogger(SelectCarController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
