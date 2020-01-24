@@ -6,6 +6,27 @@ package util;
  */
 public class Settings {
 
+    public enum Connection {
+        DEFAULT_IP("localhost"),
+        DEFAULT_PACKET_SIZE("2048"),
+        DEFAULT_PORT("9999"); 
+        
+        
+        private final String value;
+        
+        private Connection(String value){
+            this.value = value;
+        }
+        
+        public int getIntegerValue(){
+            return Integer.valueOf(this.value);
+        }
+        
+        public String getStringValue(){
+            return this.value;
+        }
+    }
+    
     public enum SpritesCars {
         DODGE("black"),
         SKYLINE("white"),

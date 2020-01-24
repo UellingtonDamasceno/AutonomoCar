@@ -6,7 +6,12 @@
 package model;
 
 import java.awt.Point;
+import java.io.IOException;
+import java.net.SocketException;
 import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.exceptions.OfflineException;
 
 /**
  *
@@ -17,23 +22,26 @@ public class Car extends Observable{
     private String sprite;
     private Point originPoint, currentPosition;
     
+    private Car front, back;
+    
+    private Connection connection;
+    
     public Car(String sprite, double ox, double oy){
         this.sprite = sprite;
         this.originPoint = new Point((int)ox, (int)oy);
+        this.connection = new Connection();
     }
     
     public String getSprite(){
         return this.sprite;
     }
     
-    public int getOriginX(){
-        return (int) this.originPoint.x;
+    public Point getOriginPoint(){
+        return this.originPoint;
     }
     
-    public int getOriginY(){
-        return (int) this.originPoint.y;
+    public void initialize() throws SocketException{
+        this.connection.initialize();
     }
-    
-    
     
 }

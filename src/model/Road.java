@@ -8,13 +8,12 @@ import java.util.Observer;
  * @author uellington
  */
 public class Road implements Observer {
-    
+        
     private String sprite, name;
 
     private Road previous, next;
     
     private int positionX, positionY;
-    
     
     public Road(String sprite, int posX, int posY) {
         this.sprite = sprite;
