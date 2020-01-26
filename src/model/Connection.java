@@ -15,9 +15,9 @@ import util.Settings;
  */
 public class Connection extends Observable implements Runnable {
 
-    private final String IP = Settings.Connection.DEFAULT_IP.getStringValue();
-    private final int PACKET_SIZE = Settings.Connection.DEFAULT_PACKET_SIZE.getIntegerValue();
-    private final int PORT = Settings.Connection.DEFAULT_PORT.getIntegerValue();
+    private final String IP = Settings.DefaultConnection.DEFAULT_IP.getStringValue();
+    private final int PACKET_SIZE = Settings.DefaultConnection.DEFAULT_PACKET_SIZE.getIntegerValue();
+    private final int PORT = Settings.DefaultConnection.DEFAULT_PORT.getIntegerValue();
 
     private DatagramSocket datagramSocket;
     private boolean online;

@@ -5,8 +5,25 @@ package util;
  * @author Uellington Damasceno
  */
 public class Settings {
+    
+    public enum DefaultCity{
+        HEIGHT("500"),
+        WIDTH("500"),
+        COLUMNS("10"),
+        ROWS("10");
+        
+        private final String value;
+        
+        private DefaultCity(String value){
+            this.value = value;
+        }
+        
+        public String getValue(){
+            return this.value;
+        }
+    }
 
-    public enum Connection {
+    public enum DefaultConnection {
         DEFAULT_IP("localhost"),
         DEFAULT_PACKET_SIZE("2048"),
         DEFAULT_PORT("9999"); 
@@ -14,7 +31,7 @@ public class Settings {
         
         private final String value;
         
-        private Connection(String value){
+        private DefaultConnection(String value){
             this.value = value;
         }
         
@@ -55,8 +72,8 @@ public class Settings {
 
     public enum SpritesCity {
 
-        CALCADA("calcada"),
-        FIM_CALCADA("calcada-vertical"),
+        CALCADA("calcada-vertical"),
+        FIM_CALCADA("calcada"),
         ESCADA("escada"),
         PAREDE("parede"),
         PAREDE_2("parede2"),

@@ -28,19 +28,22 @@ public class CityController {
         return this.city.getWidth();
     }
 
-    public void createCity(String name, int dx, int dy, double h, double w, int propotion) {
+    public void createCity(String name, int dx, int dy, int h, int w, int propotion) {
 //        if ((dx % propotion == 0) && (dy % propotion == 0)) {
-        this.city = new City(name, dx, dy, h, w, propotion);
+        this.city = new City(name, dx, dy, h, w);
 //        }else{
 //            System.out.println("CityController > createCity:: propoção invalida!");
 //        }
     }
 
     public void putRoad(String sprite, int x, int y) {
-        Road road = new Road(sprite, x, y);
-        if (this.city.isEmpaty(x, y)) {
+        int roadHeight = this.city.calculateRoadHeight(y);
+        int roadWidth = this.city.calculateRoadWidth(x);
+
+        Road road = new Road(sprite, x, y, roadHeight, roadWidth);
+        if (this.city.isEmpaty(x, y) || !this.city.getRoad(x, y).equals(road)) {
             this.city.addRoad(road, x, y);
-        }else if(this.city.getRoad(x, y).equals(road)){
+            System.out.println(road);
         }
     }
 

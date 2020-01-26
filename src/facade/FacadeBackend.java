@@ -26,10 +26,10 @@ public class FacadeBackend {
     }
 
     public void initialize(){
-        this.cityController.createCity("Xina",15, 15, 10.0, 10.0, 3);
+        //this.cityController.createCity("Xina",15, 15, 10.0, 10.0, 3);
     }
 
-    public void createCity(String name, Double height, Double width, int x, int y, int prop) {
+    public void createCity(String name, int height, int width, int x, int y, int prop) {
         this.cityController.createCity(name, x, y, height, width, prop);
     }
     public void selectCar(SpritesCars selectedCar){

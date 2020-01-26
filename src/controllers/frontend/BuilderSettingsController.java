@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import util.Settings;
+import util.Settings.DefaultCity;
 
 /**
  * FXML Controller class
@@ -37,7 +38,11 @@ public class BuilderSettingsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        this.txtName.setText("Default city");
+        this.txtHeight.setText(DefaultCity.HEIGHT.getValue());
+        this.txtWidth.setText(DefaultCity.WIDTH.getValue());
+        this.txtX.setText(DefaultCity.COLUMNS.getValue());
+        this.txtY.setText(DefaultCity.ROWS.getValue());
     }
 
     @FXML
@@ -52,8 +57,8 @@ public class BuilderSettingsController implements Initializable {
     @FXML
     private void next(ActionEvent event) {
         String name = this.txtName.getText();
-        Double height = Double.valueOf(this.txtHeight.getText());
-        Double width = Double.valueOf(this.txtWidth.getText());
+        int height = Integer.valueOf(this.txtHeight.getText());
+        int width = Integer.valueOf(this.txtWidth.getText());
         int x = Integer.valueOf(this.txtX.getText());
         int y = Integer.valueOf(this.txtY.getText());
 //        int prop = Integer.valueOf(this.txtPropotion.getText());

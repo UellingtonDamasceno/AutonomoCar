@@ -13,10 +13,10 @@ public class City {
     private int dx, dy;
     private double height, width;
 
-    private int propotion;
+    private int propotionX, propotionY;
     private Road[][] city;
-    
-    public City(String name, int dx, int dy, double h, double w, int propotion) {
+
+    public City(String name, int dx, int dy, int h, int w) {
         this.name = name;
 
         this.dx = dx;
@@ -24,6 +24,9 @@ public class City {
 
         this.height = h;
         this.width = w;
+
+        this.propotionX = (w / dx);
+        this.propotionY = (h / dy);
 
         this.city = new Road[dx][dy];
 
@@ -57,6 +60,14 @@ public class City {
 
     public boolean isEmpaty(int x, int y) {
         return this.city[x][y] == null;
+    }
+
+    public int calculateRoadHeight(int posY) {
+        return this.propotionY * (posY + 1);
+    }
+
+    public int calculateRoadWidth(int posX) {
+        return this.propotionX * (posX + 1);
     }
 
     @Override

@@ -53,6 +53,8 @@ public class BuilderController implements Initializable {
 
     private int dRow, dy;
     private int dCol, dx;
+    @FXML
+    private Label lblSelectedItem;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -69,6 +71,8 @@ public class BuilderController implements Initializable {
         dCol = (int) (gridPane.getPrefWidth() / dx);
 
         this.selectedSprite = SpritesCity.values()[0];
+        this.lblSelectedItem.setText("Selected: " + selectedSprite);
+
         this.action = ActionBuilder.CLICK;
 
         this.addNColumns(dx);
@@ -90,22 +94,22 @@ public class BuilderController implements Initializable {
         int y = (int) (event.getY() / dRow);
         int x = (int) (event.getX() / dCol);
 
-        System.out.println("PosX:" + x);
-        System.out.println("PosY:" + y);
+//        System.out.println("PosX:" + x);
+//        System.out.println("PosY:" + y);
 
         switch (this.action) {
             case CLICK:
-                System.out.println("Esta clicando");
+//                System.out.println("Esta clicando");
                 this.putRoad(selectedSprite.get(), x, y);
                 break;
             case ROTATE_LEFT:
                 this.images[x][y].setRotate(this.images[x][y].getRotate() - 90);
-                System.out.println("Esta girando: " + action);
+//                System.out.println("Esta girando: " + action);
 
                 break;
             case ROTATE_RIGHT:
                 this.images[x][y].setRotate(this.images[x][y].getRotate() + 90);
-                System.out.println("Esta girando: " + action);
+//                System.out.println("Esta girando: " + action);
                 break;
             default:
                 event.consume();
@@ -166,8 +170,8 @@ public class BuilderController implements Initializable {
             options.setOnMouseClicked((MouseEvent event) -> {
                 if (selectedSprite != null && selectedSprite != sprite) {
                     BuilderController.this.selectedSprite = sprite;
-                    System.out.println("Imagem selecionada: " + sprite.get());
                     action = ActionBuilder.CLICK;
+                    this.lblSelectedItem.setText("Selected: " + sprite.get());
                 }
             });
 
@@ -212,7 +216,7 @@ public class BuilderController implements Initializable {
             FacadeBackend.getInstance().putRoad(sprite, x, y);
             imageView.setImage(image);
             imageView.setRotate(0);
-            imagePath = sprite;
+            this.imagesPath[x][y] = sprite;
         }
 
     }
