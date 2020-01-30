@@ -69,4 +69,8 @@ public class FacadeBackend {
     public void updateSprite(String sprite, int x, int y){
         this.cityController.updateSprite(sprite, x, y);
     }
+
+    public void removeRoad(int x, int y) {
+        this.cityController.removeRoad(x, y);
+    }
 }

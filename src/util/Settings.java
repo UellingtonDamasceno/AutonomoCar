@@ -72,14 +72,15 @@ public class Settings {
 
     public enum SpritesCity {
 
-        RUA_V("calcada-vertical", true),
-        RUA_H("calcada", true),
+        NULL_ROAD("nullRoad", false),
+        RUA_V("road-v", true),
+        RUA_H("road-h", true),
         ESCADA("escada", false),
         PAREDE("parede", false),
         PAREDE_2("parede2", false),
         POSTE_1("poste1", false),
         POSTE_2("poste2", false);
-        //ROAD("road");
+        
 
         private final String path;
         private final boolean isRoad;

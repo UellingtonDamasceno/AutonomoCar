@@ -46,7 +46,7 @@ public class City {
     private void initialize(int x, int y) {
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
-                this.city[i][j] = new NullRoad(i, j, x, y);
+                this.city[i][j] = new NullRoad(i, j);
             }
         }
     }
@@ -72,11 +72,11 @@ public class City {
     }
 
     public Road getRoad(int x, int y) {
-        return (x >= dx || x < 0 || y >= dy || y < 0) ? new NullRoad(x, y, x, y) : this.city[x][y];
+        return (x >= dx || x < 0 || y >= dy || y < 0) ? new NullRoad(x, y) : this.city[x][y];
     }
 
     public boolean isEmpty(int x, int y) {
-        return this.city[x][y] == null;
+        return this.city[x][y] instanceof NullRoad;
     }
 
     public int calculateRoadHeight(int posY) {
@@ -89,6 +89,7 @@ public class City {
 
     public void connectRoads(Road a, Road b) throws VertexEqualsException, EdgeExistException {
         Edge edge = graph.put(a, b);
+        System.out.println(edge);
     }
 
     public void updateRoad(Road a, Road b) throws VertexNotExistException {

@@ -21,7 +21,7 @@ public class CityController {
     public City getCity() {
         return this.city;
     }
-    
+
     public int getDx() {
         return this.city.getDx();
     }
@@ -65,7 +65,7 @@ public class CityController {
             this.connectRoads(road, left);
             this.connectRoads(road, buttom);
         }
-        
+
         return road;
     }
 
@@ -78,14 +78,12 @@ public class CityController {
         } catch (VertexEqualsException e) {
             error = true;
         } catch (EdgeExistException ex) {
-            //System.out.println("Edge Exist");
             error = true;
         }
 
         if (error) {
             try {
                 this.city.updateRoad(a, b);
-                //this.city.showRoads();
             } catch (VertexNotExistException ex1) {
                 Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex1);
             }
@@ -94,6 +92,16 @@ public class CityController {
 
     public void updateSprite(String sprite, int x, int y) {
         this.city.getRoad(x, y).setSprite(sprite);
+    }
+
+    public void removeRoad(int x, int y) {
+        try {
+            Road road = this.city.getRoad(x, y);
+            this.city.getGraph().remove(road);
+            this.city.addRoad(new NullRoad(x, y), x, y);
+        } catch (VertexNotExistException ex) {
+            Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
