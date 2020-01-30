@@ -4,6 +4,8 @@ dist/
 
 nbproject/
 
+res/libs/
+
 build.xml
 
 manifest.mf

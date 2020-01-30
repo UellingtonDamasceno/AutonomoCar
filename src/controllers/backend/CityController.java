@@ -1,8 +1,14 @@
 package controllers.backend;
 
 import java.awt.Point;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.City;
+import model.NullRoad;
 import model.Road;
+import model.exceptions.EdgeExistException;
+import model.exceptions.VertexEqualsException;
+import model.exceptions.VertexNotExistException;
 
 /**
  *
@@ -12,6 +18,10 @@ public class CityController {
 
     private City city;
 
+    public City getCity() {
+        return this.city;
+    }
+    
     public int getDx() {
         return this.city.getDx();
     }
@@ -36,22 +46,54 @@ public class CityController {
 //        }
     }
 
-    public void putRoad(String sprite, int x, int y) {
+    public Road putRoad(String sprite, int x, int y) {
         int roadHeight = this.city.calculateRoadHeight(y);
         int roadWidth = this.city.calculateRoadWidth(x);
 
         Road road = new Road(sprite, x, y, roadHeight, roadWidth);
-        if (this.city.isEmpaty(x, y) || !this.city.getRoad(x, y).equals(road)) {
+
+        if (this.city.isEmpty(x, y) || !this.city.getRoad(x, y).equals(road)) {
             this.city.addRoad(road, x, y);
-            System.out.println(road);
+
+            Road top = city.getRoad(x, y - 1);
+            Road buttom = city.getRoad(x, y + 1);
+            Road right = city.getRoad(x + 1, y);
+            Road left = city.getRoad(x - 1, y);
+
+            this.connectRoads(road, top);
+            this.connectRoads(road, right);
+            this.connectRoads(road, left);
+            this.connectRoads(road, buttom);
+        }
+        
+        return road;
+    }
+
+    private void connectRoads(Road a, Road b) {
+        boolean error = false;
+        try {
+            if (!(b instanceof NullRoad)) {
+                this.city.connectRoads(a, b);
+            }
+        } catch (VertexEqualsException e) {
+            error = true;
+        } catch (EdgeExistException ex) {
+            //System.out.println("Edge Exist");
+            error = true;
+        }
+
+        if (error) {
+            try {
+                this.city.updateRoad(a, b);
+                //this.city.showRoads();
+            } catch (VertexNotExistException ex1) {
+                Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         }
     }
 
-    public void loadRoads(String[][] infoRoads) {
-
+    public void updateSprite(String sprite, int x, int y) {
+        this.city.getRoad(x, y).setSprite(sprite);
     }
 
-    public Point getOriginPoint() {
-        return new Point(7, 7);
-    }
 }

@@ -72,24 +72,30 @@ public class Settings {
 
     public enum SpritesCity {
 
-        CALCADA("calcada-vertical"),
-        FIM_CALCADA("calcada"),
-        ESCADA("escada"),
-        PAREDE("parede"),
-        PAREDE_2("parede2"),
-        POSTE_1("poste1"),
-        POSTE_2("poste2");
+        RUA_V("calcada-vertical", true),
+        RUA_H("calcada", true),
+        ESCADA("escada", false),
+        PAREDE("parede", false),
+        PAREDE_2("parede2", false),
+        POSTE_1("poste1", false),
+        POSTE_2("poste2", false);
         //ROAD("road");
 
         private final String path;
+        private final boolean isRoad;
         private final String ORIGIN = "/res/sprites/city/";
 
-        private SpritesCity(String path) {
+        private SpritesCity(String path, boolean isRoad) {
             this.path = (ORIGIN + path + ".png");
+            this.isRoad = isRoad;
         }
 
         public String get() {
             return this.path;
+        }
+        
+        public boolean isRoad(){
+            return this.isRoad;
         }
     }
 

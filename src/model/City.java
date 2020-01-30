@@ -1,5 +1,8 @@
 package model;
 
+import model.exceptions.EdgeExistException;
+import model.exceptions.VertexEqualsException;
+import model.exceptions.VertexNotExistException;
 import org.json.JSONObject;
 
 /**
@@ -15,6 +18,7 @@ public class City {
 
     private int propotionX, propotionY;
     private Road[][] city;
+    private Graph graph;
 
     public City(String name, int dx, int dy, int h, int w) {
         this.name = name;
@@ -28,10 +32,23 @@ public class City {
         this.propotionX = (w / dx);
         this.propotionY = (h / dy);
 
+        this.graph = new Graph();
         this.city = new Road[dx][dy];
-
+        this.initialize(dx, dy);
         System.out.println(this);
 
+    }
+    
+    public Graph getGraph() {
+        return this.graph;
+    }
+    
+    private void initialize(int x, int y) {
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                this.city[i][j] = new NullRoad(i, j, x, y);
+            }
+        }
     }
 
     public int getDx() {
@@ -55,10 +72,10 @@ public class City {
     }
 
     public Road getRoad(int x, int y) {
-        return this.city[x][y];
+        return (x >= dx || x < 0 || y >= dy || y < 0) ? new NullRoad(x, y, x, y) : this.city[x][y];
     }
 
-    public boolean isEmpaty(int x, int y) {
+    public boolean isEmpty(int x, int y) {
         return this.city[x][y] == null;
     }
 
@@ -70,6 +87,18 @@ public class City {
         return this.propotionX * (posX + 1);
     }
 
+    public void connectRoads(Road a, Road b) throws VertexEqualsException, EdgeExistException {
+        Edge edge = graph.put(a, b);
+    }
+
+    public void updateRoad(Road a, Road b) throws VertexNotExistException {
+        this.graph.update(b, a);
+    }
+
+    public void showRoads(){
+        this.graph.show();
+    }
+    
     @Override
     public String toString() {
         JSONObject city = new JSONObject();
