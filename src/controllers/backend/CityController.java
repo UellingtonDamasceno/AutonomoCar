@@ -53,7 +53,7 @@ public class CityController {
         Road road = new Road(sprite, x, y, roadHeight, roadWidth);
 
         if (this.city.isEmpty(x, y) || !this.city.getRoad(x, y).equals(road)) {
-            this.city.addRoad(road, x, y);
+            this.city.setRoad(road, x, y);
 
             Road top = city.getRoad(x, y - 1);
             Road buttom = city.getRoad(x, y + 1);
@@ -98,7 +98,7 @@ public class CityController {
         try {
             Road road = this.city.getRoad(x, y);
             this.city.getGraph().remove(road);
-            this.city.addRoad(new NullRoad(x, y), x, y);
+            this.city.setRoad(new NullRoad(x, y), x, y);
         } catch (VertexNotExistException ex) {
             Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
         }

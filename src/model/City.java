@@ -67,7 +67,7 @@ public class City {
         return this.width;
     }
 
-    public void addRoad(Road road, int x, int y) {
+    public void setRoad(Road road, int x, int y) {
         this.city[x][y] = road;
     }
 
@@ -96,6 +96,18 @@ public class City {
         this.graph.update(b, a);
     }
 
+    public int numNullRoad(){
+        int count = 0;
+        for (int i = 0; i < dx; i++) {
+            for (int j = 0; j < dy; j++) {
+                if(city[i][j] instanceof NullRoad){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    
     public void showRoads(){
         this.graph.show();
     }
