@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 import org.json.JSONObject;
@@ -8,7 +9,7 @@ import org.json.JSONObject;
  *
  * @author uellington
  */
-public class Road implements Observer {
+public class Road implements Observer, Serializable {
 
     private String sprite, name;
 
@@ -25,7 +26,11 @@ public class Road implements Observer {
         this.width = w;
     }
 
-    public void setSprite(String sprite){
+    public String getSprite() {
+        return this.sprite;
+    }
+
+    public void setSprite(String sprite) {
         this.sprite = sprite;
     }
 
@@ -57,7 +62,7 @@ public class Road implements Observer {
     public String toString() {
         JSONObject jsonObject = new JSONObject();
         JSONObject jsonArray = new JSONObject();
-        
+
         jsonObject.accumulate("Sprite", sprite.substring(sprite.lastIndexOf("/")));
 //        jsonObject.accumulate("sprite", this.sprite);
         //jsonObject.accumulate("roadName", this.name);
@@ -69,7 +74,6 @@ public class Road implements Observer {
 //        jsonArray.accumulate("height", this.height);
 //        jsonArray.accumulate("width", this.width);
 //        jsonObject.accumulate("dimension", jsonArray);
-
         return jsonObject.toString();
     }
 }

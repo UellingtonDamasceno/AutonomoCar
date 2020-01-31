@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers.frontend;
 
 import facade.FacadeBackend;
@@ -77,7 +72,6 @@ public class SelectCarController implements Initializable {
             });
 
             gridPane.add(imageView, j, i);
-
             if (j == 1) {
                 i++;
                 j = -1;
@@ -89,8 +83,8 @@ public class SelectCarController implements Initializable {
     @FXML
     private void setNextScreen(ActionEvent event) {
         try {
-            FacadeBackend.getInstance().selectCar(selectedCar);
-            FacadeFrontend.getInstance().changeScreean(Scenes.ROADS);
+            FacadeBackend.getInstance().setCar(selectedCar);
+            FacadeFrontend.getInstance().changeScreean(Scenes.SELECT_CITY);
         } catch (Exception ex) {
             Logger.getLogger(SelectCarController.class.getName()).log(Level.SEVERE, null, ex);
         }

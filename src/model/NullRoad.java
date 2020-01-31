@@ -9,7 +9,7 @@ import util.Settings.SpritesCity;
 public class NullRoad extends Road{
     
     public NullRoad(int posX, int posY) {
-        super(SpritesCity.RUA_V.get(), posX, posY, posX, posY);
+        super(SpritesCity.NULL_ROAD.get(), posX, posY, posX, posY);
     }
     
 }

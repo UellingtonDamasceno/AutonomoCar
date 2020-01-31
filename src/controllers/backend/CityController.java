@@ -1,6 +1,5 @@
 package controllers.backend;
 
-import java.awt.Point;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.City;
@@ -9,6 +8,7 @@ import model.Road;
 import model.exceptions.EdgeExistException;
 import model.exceptions.VertexEqualsException;
 import model.exceptions.VertexNotExistException;
+import util.Settings.DefaultFile;
 
 /**
  *
@@ -17,6 +17,10 @@ import model.exceptions.VertexNotExistException;
 public class CityController {
 
     private City city;
+
+    public void setCity(City city) {
+        this.city = city;
+    }
 
     public City getCity() {
         return this.city;
@@ -36,6 +40,15 @@ public class CityController {
 
     public double getWidth() {
         return this.city.getWidth();
+    }
+
+    public String getLocationToSave() {
+        String directory = DefaultFile.CITIES_DIRECTORY.get() + this.city.getName();
+        return directory + DefaultFile.DEFAULT_EXTENSION.get();
+    }
+
+    public String getLocationToSave(String cityName) {
+        return DefaultFile.CITIES_DIRECTORY.get().concat(cityName);
     }
 
     public void createCity(String name, int dx, int dy, int h, int w, int propotion) {
@@ -103,5 +116,4 @@ public class CityController {
             Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

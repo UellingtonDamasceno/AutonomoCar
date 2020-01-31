@@ -6,6 +6,21 @@ package util;
  */
 public class Settings {
     
+    public enum DefaultFile{
+        CITIES_DIRECTORY("res/cities/"),
+        DEFAULT_EXTENSION(".bin");
+        
+        private final String value;
+        
+        private DefaultFile(String value){
+            this.value = value;
+        }
+        
+        public String get(){
+            return this.value;
+        }
+    }
+    
     public enum DefaultCity{
         HEIGHT("500"),
         WIDTH("500"),
@@ -26,8 +41,7 @@ public class Settings {
     public enum DefaultConnection {
         DEFAULT_IP("localhost"),
         DEFAULT_PACKET_SIZE("2048"),
-        DEFAULT_PORT("9999"); 
-        
+        DEFAULT_PORT("9999");         
         
         private final String value;
         
@@ -138,6 +152,7 @@ public class Settings {
     public enum Scenes {
         MAIN("Main.fxml", "Menu", false),
         SELECT_CAR("SelectCar.fxml", "Escolha seu carro", false),
+        SELECT_CITY("SelectCity.fxml", "Escolha sua cidade", false),
         BUILDER("Builder.fxml", "Construtor de cidades", false),
         BUILDER_SETTINGS("BuilderSettings.fxml", "Configurações", false),
         ROADS("Roads.fxml", "Cidade", false);

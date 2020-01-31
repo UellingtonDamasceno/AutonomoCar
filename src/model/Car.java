@@ -6,12 +6,9 @@
 package model;
 
 import java.awt.Point;
-import java.io.IOException;
 import java.net.SocketException;
 import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.exceptions.OfflineException;
+import org.json.JSONObject;
 
 /**
  *
@@ -20,15 +17,17 @@ import model.exceptions.OfflineException;
 public class Car extends Observable{
     
     private String sprite;
+    private String cityName;
     private Point originPoint, currentPosition;
-    
+  
     private Car front, back;
     
     private Connection connection;
     
-    public Car(String sprite, double ox, double oy){
+    public Car(String sprite, String cityName, Point origin){
         this.sprite = sprite;
-        this.originPoint = new Point((int)ox, (int)oy);
+        this.cityName = cityName;
+        this.originPoint = origin;
         this.connection = new Connection();
     }
     
@@ -42,6 +41,14 @@ public class Car extends Observable{
     
     public void initialize() throws SocketException{
         this.connection.initialize();
+    }
+    
+    public void process(String command){
+        
+    }
+    
+    public void process(JSONObject command){
+        
     }
     
 }

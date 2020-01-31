@@ -24,10 +24,10 @@ public class CarController {
         return this.car;
     }
 
-    public Car createCar(SpritesCars selectedCar, Point origin) {
+    public Car createCar(SpritesCars selectedCar, String cityName, Point origin) {
         switch(selectedCar){
             default:{
-                return new Car(selectedCar.getSmall(), origin.x, origin.y);
+                return new Car(selectedCar.getSmall(), cityName, origin);
             }
         }
     }

@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import model.exceptions.EdgeExistException;
 import model.exceptions.VertexEqualsException;
 import model.exceptions.VertexNotExistException;
@@ -9,13 +10,12 @@ import org.json.JSONObject;
  *
  * @author uellington
  */
-public class City {
+public class City implements Serializable {
 
     private String name;
 
     private int dx, dy;
     private double height, width;
-
     private int propotionX, propotionY;
     private Road[][] city;
     private Graph graph;
@@ -38,17 +38,13 @@ public class City {
         System.out.println(this);
 
     }
-    
+
     public Graph getGraph() {
         return this.graph;
     }
-    
-    private void initialize(int x, int y) {
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                this.city[i][j] = new NullRoad(i, j);
-            }
-        }
+
+    public String getName() {
+        return this.name;
     }
 
     public int getDx() {
@@ -79,6 +75,14 @@ public class City {
         return this.city[x][y] instanceof NullRoad;
     }
 
+    private void initialize(int x, int y) {
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                this.city[i][j] = new NullRoad(i, j);
+            }
+        }
+    }
+
     public int calculateRoadHeight(int posY) {
         return this.propotionY * (posY + 1);
     }
@@ -96,22 +100,22 @@ public class City {
         this.graph.update(b, a);
     }
 
-    public int numNullRoad(){
+    public int numNullRoad() {
         int count = 0;
         for (int i = 0; i < dx; i++) {
             for (int j = 0; j < dy; j++) {
-                if(city[i][j] instanceof NullRoad){
+                if (city[i][j] instanceof NullRoad) {
                     count++;
                 }
             }
         }
         return count;
     }
-    
-    public void showRoads(){
+
+    public void showRoads() {
         this.graph.show();
     }
-    
+
     @Override
     public String toString() {
         JSONObject city = new JSONObject();
@@ -124,5 +128,4 @@ public class City {
 
         return city.toString();
     }
-
 }

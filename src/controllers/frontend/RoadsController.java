@@ -4,6 +4,9 @@ import facade.FacadeBackend;
 import facade.FacadeFrontend;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -13,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import util.Settings.Scenes;
 import util.Settings.SpritesCity;
 
 /**
@@ -59,25 +63,22 @@ public class RoadsController implements Initializable {
         int rows = this.gridPane.getRowConstraints().size();
         int columns = this.gridPane.getColumnConstraints().size();
 
-        Image image = new Image(SpritesCity.ESCADA.get());
-
-        System.out.println("Reder city: " + rows + " x " + columns);
-        System.out.println("Rendering grid X: " + columns + ":: Y: " + rows);
-
         heigth = this.gridPane.getPrefHeight() / rows;
         width = this.gridPane.getPrefWidth() / columns;
 
         System.out.println(heigth);
         System.out.println(width);
-
-//        for (int i = 0; i < columns; i++) {
-//            for (int j = 0; j < rows; j++) {
-//                ImageView imageView = new ImageView(image);
-//                imageView.setFitHeight(heigth);
-//                imageView.setFitWidth(width);
-//                gridPane.add(imageView, i, j);
-//            }
-//        }
+        Image image;
+        for (int i = 0; i < columns; i++) {
+            for (int j = 0; j < rows; j++) {
+                String sprite = FacadeBackend.getInstance().getCity().getRoad(i, j).getSprite();
+                image = new Image(sprite);
+                ImageView imageView = new ImageView(image);
+                imageView.setFitHeight(heigth);
+                imageView.setFitWidth(width);
+                gridPane.add(imageView, i, j);
+            }
+        }
     }
 
     private void addNColumns(int columns) {
@@ -104,5 +105,14 @@ public class RoadsController implements Initializable {
     private void pushCar(MouseEvent event) {
         String selectedCar = FacadeBackend.getInstance().getSelectedCar();
         this.spawn(selectedCar, (int)(event.getX()/this.width), (int)(event.getY()/this.heigth));
+    }
+
+    @FXML
+    private void previous(ActionEvent event) {
+        try {
+            FacadeFrontend.getInstance().changeScreean(Scenes.SELECT_CITY);
+        } catch (Exception ex) {
+            Logger.getLogger(RoadsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
