@@ -3,8 +3,10 @@ package facade;
 import controllers.backend.CarController;
 import controllers.backend.CityController;
 import controllers.backend.FileController;
+import java.awt.Point;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import model.Car;
 import model.City;
 import model.Road;
 import model.exceptions.FileNameIsEmptyException;
@@ -48,13 +50,13 @@ public class FacadeBackend {
     }
 
     public void setCar(SpritesCars selectedCar) {
-//        Point originPoint = this.cityController.getOriginPoint();
-//        Car car = this.carController.createCar(selectedCar, originPoint);
-//        this.carController.setCar(car);
+        String cityName = this.cityController.getCity().getName();
+        Car car = this.carController.createCar(selectedCar, cityName);
+        this.carController.setCar(car);
     }
 
-    public String getSelectedCar() {
-        return this.carController.getCarSprite();
+    public Car getSelectedCar() {
+        return this.carController.getCar();
     }
 
     public City getCity() {
@@ -97,5 +99,13 @@ public class FacadeBackend {
         City city = this.cityController.getCity();
         String directory = this.cityController.getLocationToSave();
         this.fileCoontroller.writerObject(directory, city);
+    }
+
+    public int getPropotionX() {
+       return this.cityController.getCity().getPropotionX();
+    }
+
+    public int getPropotionY() {
+        return this.cityController.getCity().getPropotionY();
     }
 }

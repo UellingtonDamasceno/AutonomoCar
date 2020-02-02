@@ -3,6 +3,7 @@ package controllers.frontend;
 import facade.FacadeBackend;
 import facade.FacadeFrontend;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,8 +17,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import model.Car;
+import model.Road;
 import util.Settings.Scenes;
-import util.Settings.SpritesCity;
 
 /**
  * FXML Controller class
@@ -31,8 +35,10 @@ public class RoadsController implements Initializable {
     @FXML
     private Label lblCordinates;
 
-    private double heigth;
-    private double width;
+    private int heigth;
+    private int width;
+
+    private List cars;
 
     /**
      * Initializes the controller class.
@@ -41,15 +47,15 @@ public class RoadsController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.gridPane.getColumnConstraints().clear();
         this.gridPane.getRowConstraints().clear();
-        
+
         gridPane.setPrefHeight(FacadeBackend.getInstance().getCityHeight());
         gridPane.setPrefWidth(FacadeBackend.getInstance().getCityWidth());
-        
-        int dx = FacadeBackend.getInstance().getCityDimensionX();
-        int dy = FacadeBackend.getInstance().getCityDimensionY();
 
-        this.addNColumns(dx);
-        this.addNRows(dy);
+        this.heigth = FacadeBackend.getInstance().getPropotionY();
+        this.width = FacadeBackend.getInstance().getPropotionX();
+
+        this.addNColumns(FacadeBackend.getInstance().getCityDimensionX());
+        this.addNRows(FacadeBackend.getInstance().getCityDimensionY());
 
         this.render();
     }
@@ -60,51 +66,65 @@ public class RoadsController implements Initializable {
     }
 
     private void render() {
-        int rows = this.gridPane.getRowConstraints().size();
-        int columns = this.gridPane.getColumnConstraints().size();
-
-        heigth = this.gridPane.getPrefHeight() / rows;
-        width = this.gridPane.getPrefWidth() / columns;
-
-        System.out.println(heigth);
-        System.out.println(width);
-        Image image;
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < rows; j++) {
-                String sprite = FacadeBackend.getInstance().getCity().getRoad(i, j).getSprite();
-                image = new Image(sprite);
-                ImageView imageView = new ImageView(image);
-                imageView.setFitHeight(heigth);
-                imageView.setFitWidth(width);
-                gridPane.add(imageView, i, j);
+        Road road;
+        int dx = FacadeBackend.getInstance().getCityDimensionX();
+        int dy = FacadeBackend.getInstance().getCityDimensionY();
+        for (int x = 0; x < dx; x++) {
+            for (int y = 0; y < dy; y++) {
+                road = FacadeBackend.getInstance().getCity().getRoad(x, y);
+                this.spawn(road.getSprite(), this.heigth, this.width, x, y);
             }
         }
     }
 
     private void addNColumns(int columns) {
-        for (int i = 0; i < columns; i++) {
+        for (int x = 0; x < columns; x++) {
             this.gridPane.getColumnConstraints().add(new ColumnConstraints());
         }
     }
 
     private void addNRows(int rows) {
-        for (int i = 0; i < rows; i++) {
+        for (int y = 0; y < rows; y++) {
             this.gridPane.getRowConstraints().add(new RowConstraints());
         }
     }
 
-    private void spawn(String sprite, int x, int y) {
+    private void spawn(String sprite, int h, int w, int x, int y) {
         Image image = new Image(sprite);
         ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(this.heigth);
-        imageView.setFitWidth(this.width);
+        imageView.setFitHeight(h);
+        imageView.setFitWidth(w);
         this.gridPane.add(imageView, x, y);
     }
 
     @FXML
     private void pushCar(MouseEvent event) {
-        String selectedCar = FacadeBackend.getInstance().getSelectedCar();
-        this.spawn(selectedCar, (int)(event.getX()/this.width), (int)(event.getY()/this.heigth));
+        Car selectedCar = FacadeBackend.getInstance().getSelectedCar();
+
+        int spawnX = (int) (event.getX() / this.heigth);
+        int spawnY = (int) (event.getY() / this.width);
+        
+        System.out.println("Event x: "+ event.getX());
+        System.out.println("Event y: "+ event.getY());
+        System.out.println("Spawn x: "+ spawnX);
+        System.out.println("Spawn y :"+ spawnY);
+        System.out.println("dx: " +this.heigth);
+        System.out.println("dy: "+this.width);
+        
+        if (FacadeBackend.getInstance().getCity().isRoad(spawnX, spawnY)) {
+            Road road = FacadeBackend.getInstance().getCity().getRoad(spawnX, spawnY);
+            
+            selectedCar.setOriginPoint(event.getX(), event.getY());
+
+            Circle car = new Circle(5);
+            car.setFill(Color.BLUE);
+            this.gridPane.getChildren().add(car);
+            car.setTranslateX(event.getX());
+            car.setTranslateY(event.getY());
+        }else{
+            System.out.println("Não é uma rua");
+        }
+
     }
 
     @FXML

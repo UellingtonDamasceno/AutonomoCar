@@ -125,11 +125,17 @@ public class Settings {
     }
 
     public enum RoadsTypes {
-        
-        H(2),
+        SINGLE(1),
+        HORIZONTAL(2),
         L(2),
+        L_RIGHT(2),
+        L_LEFT(2),
+        L_UP_RIGHT(2),
+        L_UP_LEFT(2),
         T(3),
-        V(2),
+        T_RIGHT(3),
+        T_LEFT(3),
+        T_INVERSE(3),
         X(4);
         
         public int maxConnections;

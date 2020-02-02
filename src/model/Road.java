@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 import org.json.JSONObject;
+import util.Settings.RoadsTypes;
 
 /**
  *
@@ -11,14 +12,17 @@ import org.json.JSONObject;
  */
 public class Road implements Observer, Serializable {
 
-    private String sprite, name;
-
-    private Road previous, next;
+    private String sprite;
+    private RoadsTypes type;
 
     private int positionX, positionY;
     private int height, width;
 
-    public Road(String sprite, int posX, int posY, int h, int w) {
+    public Road(String sprite, int posX, int posY, int h, int w){
+        this(sprite, posX, posY, h, w, RoadsTypes.SINGLE);
+    }
+    
+    public Road(String sprite, int posX, int posY, int h, int w, RoadsTypes type) {
         this.sprite = sprite;
         this.positionX = posX;
         this.positionY = posY;
@@ -29,11 +33,27 @@ public class Road implements Observer, Serializable {
     public String getSprite() {
         return this.sprite;
     }
+    
+    public RoadsTypes getType(){
+        return this.type;
+    }
+
+    public double getWidth() {
+        return this.width;
+    }
+
+    public double getHeight() {
+        return this.height;
+    }
 
     public void setSprite(String sprite) {
         this.sprite = sprite;
     }
 
+    public void setType(RoadsTypes type){
+        this.type = type;
+    }
+    
     @Override
     public void update(Observable o, Object arg) {
 
