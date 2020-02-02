@@ -7,11 +7,11 @@ import util.RoadState;
  *
  * @author uellington
  */
-public class TRoadInverse implements RoadState, Serializable {
+public class TrunRightInverse implements RoadState, Serializable {
 
     private RoadState lastState;
 
-    public TRoadInverse(RoadState lastState) {
+    public TrunRightInverse(RoadState lastState) {
         this.lastState = lastState;
     }
 
@@ -22,12 +22,12 @@ public class TRoadInverse implements RoadState, Serializable {
 
     @Override
     public RoadState putDown() {
-        return new XRoad(this);
+        return new TRightRoad(this);
     }
 
     @Override
     public RoadState putLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new TRoadInverse(this);
     }
 
     @Override
@@ -37,8 +37,7 @@ public class TRoadInverse implements RoadState, Serializable {
 
     @Override
     public RoadState removeUp() {
-        lastState = (lastState == null) ? new HRoadUp(null) : lastState;
-        return lastState;
+        return (lastState == null) ? new HRoadDown(null) : lastState;
     }
 
     @Override
@@ -48,19 +47,17 @@ public class TRoadInverse implements RoadState, Serializable {
 
     @Override
     public RoadState removeLeft() {
-        lastState = (lastState == null) ? new TrunRightInverse(null) : lastState;
-        return lastState;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public RoadState removeRight() {
-        lastState = (lastState == null) ? new TrunLeftInverse(null) : lastState;
-        return lastState;
+        return (lastState == null) ? new VRoadDown(null) : lastState;
     }
-
+    
     @Override
-    public String getType() {
-        return "TRoadInverse";
+    public String getType(){
+        return "TrunRightInverse";
     }
 
 }

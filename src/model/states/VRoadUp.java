@@ -1,38 +1,38 @@
 package model.states;
 
+import java.io.Serializable;
 import util.RoadState;
 
 /**
  *
  * @author uellington
  */
-public class Horizontal implements RoadState {
+public class VRoadUp implements RoadState, Serializable{
 
     private RoadState lastState;
-    
-    public Horizontal(RoadState lastState){
+
+    protected VRoadUp(RoadState lastState) {
         this.lastState = lastState;
-        System.out.println("Current: Horizontal");
     }
-    
+
     @Override
     public RoadState putUp() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ConnectorVRoad(this);
     }
 
     @Override
     public RoadState putDown() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ConnectorVRoad(this);
     }
 
     @Override
     public RoadState putLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new TrunLeftInverse(this);
     }
 
     @Override
     public RoadState putRight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new TrunRightInverse(this);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class Horizontal implements RoadState {
 
     @Override
     public RoadState removeDown() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (lastState == null) ? new Single() : lastState;
     }
 
     @Override
@@ -55,5 +55,9 @@ public class Horizontal implements RoadState {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
+    @Override
+    public String getType() {
+        return "VRoadUp";
+    }
+
 }

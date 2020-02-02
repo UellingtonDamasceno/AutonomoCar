@@ -5,16 +5,18 @@
  */
 package model.states;
 
+import java.io.Serializable;
 import util.RoadState;
 
 /**
  *
  * @author uellington
  */
-public class TrunLeftInverse implements RoadState{
+public class TrunLeftInverse implements RoadState, Serializable {
+
     private RoadState lastState;
-    
-    public TrunLeftInverse(RoadState lastState){
+
+    public TrunLeftInverse(RoadState lastState) {
         this.lastState = lastState;
     }
 
@@ -40,7 +42,7 @@ public class TrunLeftInverse implements RoadState{
 
     @Override
     public RoadState removeUp() {
-        return (lastState == null) ? new Horizontal(null) : lastState;
+        return (lastState == null) ? new HRoadUp(null) : lastState;
     }
 
     @Override
@@ -50,12 +52,17 @@ public class TrunLeftInverse implements RoadState{
 
     @Override
     public RoadState removeLeft() {
-        return (lastState == null) ? new Vertical(null) : lastState;
+        return (lastState == null) ? new VRoadDown(null) : lastState;
     }
 
     @Override
     public RoadState removeRight() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    public String getType() {
+        return "TrunLeftInverse";
+    }
+
 }

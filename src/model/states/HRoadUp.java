@@ -7,32 +7,32 @@ import util.RoadState;
  *
  * @author uellington
  */
-public class TRoad implements RoadState, Serializable {
+public class HRoadUp implements RoadState, Serializable {
 
     private RoadState lastState;
-
-    public TRoad(RoadState lastState) {
+    
+    public HRoadUp(RoadState lastState){
         this.lastState = lastState;
     }
-
+    
     @Override
     public RoadState putUp() {
-        return new XRoad(this);
+        return new TrunRightInverse(this);
     }
 
     @Override
     public RoadState putDown() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new TrunLeft(this);
     }
 
     @Override
     public RoadState putLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ConnectorHRoad(this);
     }
 
     @Override
     public RoadState putRight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ConnectorHRoad(this);
     }
 
     @Override
@@ -42,21 +42,23 @@ public class TRoad implements RoadState, Serializable {
 
     @Override
     public RoadState removeDown() {
-        return (lastState == null) ? new HRoadUp(null) : lastState;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public RoadState removeLeft() {
-        return (lastState == null) ? new TrunRight(null) : lastState;
+        return (lastState == null) ? new Single() : lastState;
     }
 
     @Override
     public RoadState removeRight() {
-        return (lastState == null) ? new TrunLeft(null) : lastState;
+        return (lastState == null) ? new Single() : lastState;
     }
 
     @Override
     public String getType() {
-        return "TRoad";
+        return "HRoadUp";
     }
+
+    
 }

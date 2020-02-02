@@ -7,47 +7,47 @@ import util.RoadState;
  *
  * @author uellington
  */
-public class TLeftRoad implements RoadState, Serializable {
+public class VRoadDown implements RoadState, Serializable{
 
     private RoadState lastState;
 
-    protected TLeftRoad(RoadState lastState) {
+    public VRoadDown(RoadState lastState) {
         this.lastState = lastState;
     }
 
     @Override
     public RoadState putUp() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ConnectorVRoad(this);
     }
 
     @Override
     public RoadState putDown() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ConnectorVRoad(this);
     }
 
     @Override
     public RoadState putLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new TrunLeft(this);
     }
 
     @Override
     public RoadState putRight() {
-        return new XRoad(this);
+        return new TrunRight(this);
     }
 
     @Override
     public RoadState removeUp() {
-        return (lastState == null) ? new TrunLeft(null) : lastState;
+        return (lastState == null) ? new Single() : lastState;
     }
 
     @Override
     public RoadState removeDown() {
-        return (lastState == null) ? new TrunLeftInverse(null) : lastState;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public RoadState removeLeft() {
-        return (lastState == null) ? new VRoadUp(null) : lastState;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -57,6 +57,7 @@ public class TLeftRoad implements RoadState, Serializable {
 
     @Override
     public String getType() {
-        return "TLeftRoad";
+        return "VRoadDown";
     }
+
 }

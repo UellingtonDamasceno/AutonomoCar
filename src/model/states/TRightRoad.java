@@ -1,14 +1,16 @@
 package model.states;
 
+import java.io.Serializable;
 import util.RoadState;
 
 /**
  *
  * @author uellington
  */
-public class TRightRoad implements RoadState {
+public class TRightRoad implements RoadState, Serializable {
+
     private RoadState lastState;
-    
+
     public TRightRoad(RoadState lastState) {
         this.lastState = lastState;
     }
@@ -40,7 +42,7 @@ public class TRightRoad implements RoadState {
 
     @Override
     public RoadState removeDown() {
-        return (lastState == null) ? new TurnRightInverse(null) : lastState;
+        return (lastState == null) ? new TrunRightInverse(null) : lastState;
     }
 
     @Override
@@ -50,7 +52,11 @@ public class TRightRoad implements RoadState {
 
     @Override
     public RoadState removeRight() {
-        return (lastState == null) ? new Vertical(null) : lastState;
+        return (lastState == null) ? new VRoadUp(null) : lastState;
     }
-    
+
+    @Override
+    public String getType() {
+        return "TrunRightRoad";
+    }
 }

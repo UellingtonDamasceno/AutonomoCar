@@ -39,6 +39,14 @@ public class City implements Serializable {
 
     }
 
+    private void initialize(int x, int y) {
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                this.city[i][j] = new NullRoad(i, j);
+            }
+        }
+    }
+    
     public Graph getGraph() {
         return this.graph;
     }
@@ -62,12 +70,12 @@ public class City implements Serializable {
     public double getWidth() {
         return this.width;
     }
-    
-    public int getPropotionX(){
+
+    public int getPropotionX() {
         return this.propotionX;
     }
-    
-    public int getPropotionY(){
+
+    public int getPropotionY() {
         return this.propotionY;
     }
 
@@ -83,12 +91,8 @@ public class City implements Serializable {
         return this.city[x][y] instanceof NullRoad;
     }
 
-    private void initialize(int x, int y) {
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                this.city[i][j] = new NullRoad(i, j);
-            }
-        }
+    public boolean isRoad(int x, int y) {
+        return !(this.getRoad(x, y) instanceof NullRoad);
     }
 
     public int calculateRoadHeight(int posY) {
@@ -98,14 +102,9 @@ public class City implements Serializable {
     public int calculateRoadWidth(int posX) {
         return this.propotionX * (posX + 1);
     }
-    
-    public boolean isRoad(int x, int y){
-        return !(this.getRoad(x, y) instanceof NullRoad);
-    }
-    
+
     public void connectRoads(Road a, Road b) throws VertexEqualsException, EdgeExistException {
         Edge edge = graph.put(a, b);
-        System.out.println(edge);
     }
 
     public void updateRoad(Road a, Road b) throws VertexNotExistException {

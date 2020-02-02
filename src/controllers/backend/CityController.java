@@ -9,6 +9,7 @@ import model.exceptions.EdgeExistException;
 import model.exceptions.VertexEqualsException;
 import model.exceptions.VertexNotExistException;
 import util.Settings.DefaultFile;
+import util.Settings.Orientation;
 
 /**
  *
@@ -73,22 +74,47 @@ public class CityController {
             Road right = city.getRoad(x + 1, y);
             Road left = city.getRoad(x - 1, y);
 
-            this.connectRoads(road, top);
-            this.connectRoads(road, right);
-            this.connectRoads(road, left);
-            this.connectRoads(road, buttom);
-    
-            
+            this.connectRoads(road, top, Orientation.NORTH);
+            this.connectRoads(road, right, Orientation.EAST);
+            this.connectRoads(road, left, Orientation.WEST);
+            this.connectRoads(road, buttom, Orientation.SOUTH);
+
         }
 
         return road;
     }
 
-    private void connectRoads(Road a, Road b) {
+    private void connectRoads(Road newRoad, Road oldRoad, Orientation orientation) {
         boolean error = false;
         try {
-            if (!(b instanceof NullRoad)) {
-                this.city.connectRoads(a, b);
+            if (!(oldRoad instanceof NullRoad)) {
+                this.city.connectRoads(newRoad, oldRoad);
+                switch (orientation) {
+                    case NORTH: {
+                        newRoad.putUp();
+                        oldRoad.putDown();
+                        System.out.println("north");
+                        break;
+                    }
+                    case SOUTH:{
+                        newRoad.putDown();
+                        oldRoad.putUp();
+                        System.out.println("south");
+                        break;
+                    }
+                    case EAST:{
+                        newRoad.putRight();
+                        oldRoad.putLeft();
+                        System.out.println("east");
+                        break;
+                    }
+                    case WEST:{
+                        newRoad.putLeft();
+                        oldRoad.putRight();
+                        System.out.println("west");
+                        break;
+                    }
+                }
             }
         } catch (VertexEqualsException e) {
             error = true;
@@ -98,7 +124,7 @@ public class CityController {
 
         if (error) {
             try {
-                this.city.updateRoad(a, b);
+                this.city.updateRoad(newRoad, oldRoad);
             } catch (VertexNotExistException ex1) {
                 Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex1);
             }

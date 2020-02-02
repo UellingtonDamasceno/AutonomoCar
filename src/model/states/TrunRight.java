@@ -1,18 +1,20 @@
 package model.states;
 
+import java.io.Serializable;
 import util.RoadState;
 
 /**
  *
  * @author uellington
  */
-public class TrunRight implements RoadState {
+public class TrunRight implements RoadState, Serializable{
+
     private RoadState lastState;
-    
-    public TrunRight(RoadState lastState){
+
+    public TrunRight(RoadState lastState) {
         this.lastState = lastState;
     }
-    
+
     @Override
     public RoadState putUp() {
         return new TRightRoad(this);
@@ -40,7 +42,7 @@ public class TrunRight implements RoadState {
 
     @Override
     public RoadState removeDown() {
-        return (lastState == null) ? new Horizontal(null) : lastState;
+        return (lastState == null) ? new HRoadUp(null) : lastState;
     }
 
     @Override
@@ -50,7 +52,11 @@ public class TrunRight implements RoadState {
 
     @Override
     public RoadState removeRight() {
-        return (lastState == null) ? new Vertical(null) : lastState;
+        return (lastState == null) ? new VRoadUp(null) : lastState;
     }
-    
+
+    @Override
+    public String getType() {
+        return "TrunRight";
+    }
 }

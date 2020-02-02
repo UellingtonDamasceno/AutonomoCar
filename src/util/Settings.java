@@ -5,35 +5,35 @@ package util;
  * @author Uellington Damasceno
  */
 public class Settings {
-    
-    public enum DefaultFile{
+
+    public enum DefaultFile {
         CITIES_DIRECTORY("res/cities/"),
         DEFAULT_EXTENSION(".bin");
-        
+
         private final String value;
-        
-        private DefaultFile(String value){
+
+        private DefaultFile(String value) {
             this.value = value;
         }
-        
-        public String get(){
+
+        public String get() {
             return this.value;
         }
     }
-    
-    public enum DefaultCity{
+
+    public enum DefaultCity {
         HEIGHT("500"),
         WIDTH("500"),
         COLUMNS("10"),
         ROWS("10");
-        
+
         private final String value;
-        
-        private DefaultCity(String value){
+
+        private DefaultCity(String value) {
             this.value = value;
         }
-        
-        public String getValue(){
+
+        public String getValue() {
             return this.value;
         }
     }
@@ -41,23 +41,23 @@ public class Settings {
     public enum DefaultConnection {
         DEFAULT_IP("localhost"),
         DEFAULT_PACKET_SIZE("2048"),
-        DEFAULT_PORT("9999");         
-        
+        DEFAULT_PORT("9999");
+
         private final String value;
-        
-        private DefaultConnection(String value){
+
+        private DefaultConnection(String value) {
             this.value = value;
         }
-        
-        public int getIntegerValue(){
+
+        public int getIntegerValue() {
             return Integer.valueOf(this.value);
         }
-        
-        public String getStringValue(){
+
+        public String getStringValue() {
             return this.value;
         }
     }
-    
+
     public enum SpritesCars {
         DODGE("black"),
         SKYLINE("white"),
@@ -86,41 +86,45 @@ public class Settings {
 
     public enum SpritesCity {
 
-        NULL_ROAD("nullRoad", false),
-        RUA_V("road-v", true),
-        RUA_H("road-h", true),
-        ESCADA("escada", false),
-        PAREDE("parede", false),
-        PAREDE_2("parede2", false),
-        POSTE_1("poste1", false),
-        POSTE_2("poste2", false);
+        NULL_ROAD("nullRoad.png", false),
         
+        RUA_V("road-v.jpg", true),
+        RUA_H("road-h.jpg", true),
+        
+        CURVA_E("road-l-left.png", true),
+        CURVA_D("road-l-right.png", true),
+        CURVA_E_I("road-l-left-inverse.png", true),
+        CURVA_D_I("road-l-right-inverse.png", true),
+        
+        RUA_T("road-t.png", true),
+        RUA_T_LEFT("road-t-left.png", true),
+        RUA_T_RIGHT("road-t-right.png", true),
+        RUA_T_INVERSE("road-t-inverse.png", true),
+        
+        RUA_X("road-x.jpg", true),
+       
+        TERRA_1("terra.png", false),
+        TERRA_2("terra2.png", false),
+        PAREDE_2("parede2.png", false),
+        
+        POSTE_1("poste1.png", false),
+        POSTE_2("poste2.png", false);
 
         private final String path;
         private final boolean isRoad;
         private final String ORIGIN = "/res/sprites/city/";
 
         private SpritesCity(String path, boolean isRoad) {
-            this.path = (ORIGIN + path + ".png");
+            this.path = (ORIGIN + path);
             this.isRoad = isRoad;
         }
 
         public String get() {
             return this.path;
         }
-        
-        public boolean isRoad(){
+
+        public boolean isRoad() {
             return this.isRoad;
-        }
-    }
-
-    public enum CityLocation {
-        CHINA("china");
-
-        private final String name;
-
-        private CityLocation(String name) {
-            this.name = name;
         }
     }
 
@@ -137,22 +141,29 @@ public class Settings {
         T_LEFT(3),
         T_INVERSE(3),
         X(4);
-        
+
         public int maxConnections;
 
         private RoadsTypes(int maxConnections) {
             this.maxConnections = maxConnections;
         }
-        
-        public int getMaxConnections(){
+
+        public int getMaxConnections() {
             return this.maxConnections;
         }
     }
-    
-    public enum ActionBuilder{
+
+    public enum ActionBuilder {
         CLICK,
         ROTATE_LEFT,
         ROTATE_RIGHT;
+    }
+
+    public enum Orientation {
+        NORTH,
+        SOUTH,
+        EAST,
+        WEST
     }
 
     public enum Scenes {
@@ -162,7 +173,7 @@ public class Settings {
         BUILDER("Builder.fxml", "Construtor de cidades", false),
         BUILDER_SETTINGS("BuilderSettings.fxml", "Configurações", false),
         ROADS("Roads.fxml", "Cidade", false);
-        
+
         private final String name;
         private final String title;
         private final boolean cache;

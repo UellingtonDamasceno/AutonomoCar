@@ -3,7 +3,9 @@ package model;
 import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
+import model.states.Single;
 import org.json.JSONObject;
+import util.RoadState;
 import util.Settings.RoadsTypes;
 
 /**
@@ -14,7 +16,9 @@ public class Road implements Observer, Serializable {
 
     private String sprite;
     private RoadsTypes type;
-
+    
+    private RoadState state;
+    
     private int positionX, positionY;
     private int height, width;
 
@@ -28,14 +32,15 @@ public class Road implements Observer, Serializable {
         this.positionY = posY;
         this.height = h;
         this.width = w;
+        this.state = new Single();
     }
 
     public String getSprite() {
         return this.sprite;
     }
     
-    public RoadsTypes getType(){
-        return this.type;
+    public String getType(){
+        return this.state.getType();
     }
 
     public double getWidth() {
@@ -54,6 +59,37 @@ public class Road implements Observer, Serializable {
         this.type = type;
     }
     
+    public void putUp(){
+        this.state = this.state.putUp();
+    }
+    
+    public void putDown(){
+        this.state = this.state.putDown();
+    }
+    
+    public void putLeft(){
+        this.state = this.state.putLeft();
+    }
+    
+    public void putRight(){
+        this.state = this.state.putRight();
+    }
+    
+    public void removeUp(){
+        this.state = this.state.removeUp();
+    }
+    
+    public void removeDown(){
+        this.state = this.state.removeDown();
+    }
+    
+    public void removeLeft(){
+        this.state = this.state.removeLeft();
+    }
+    
+    public void removeRight(){
+        this.state = this.state.removeRight();
+    }
     @Override
     public void update(Observable o, Object arg) {
 

@@ -1,19 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.states;
 
+import java.io.Serializable;
 import util.RoadState;
 
 /**
  *
  * @author uellington
  */
-public class XRoad implements RoadState {
+public class XRoad implements RoadState, Serializable{
+
     private RoadState lastState;
-    
+
     public XRoad(RoadState lastState) {
         this.lastState = lastState;
     }
@@ -40,12 +37,12 @@ public class XRoad implements RoadState {
 
     @Override
     public RoadState removeUp() {
-        return new TRoad(this);
+        return (lastState == null) ? new TRoad(this) : lastState;
     }
 
     @Override
     public RoadState removeDown() {
-        return new TRoadInverse(this);
+        return (lastState == null) ? new TRoadInverse(this) : lastState;
     }
 
     @Override
@@ -57,5 +54,10 @@ public class XRoad implements RoadState {
     public RoadState removeRight() {
         return (lastState == null) ? new TLeftRoad(null) : lastState;
     }
-    
+
+    @Override
+    public String getType() {
+        return "XRoad";
+    }
+
 }

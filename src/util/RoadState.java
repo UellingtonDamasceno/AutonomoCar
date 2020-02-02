@@ -6,6 +6,8 @@ package util;
  */
 public interface RoadState {
     
+    public String getType();
+    
     public RoadState putUp();
     public RoadState putDown();
     public RoadState putLeft();
