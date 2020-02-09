@@ -66,6 +66,7 @@ public class SelectCityController implements Initializable {
             String[] cities = FacadeBackend.getInstance().getAllCities();
             ObservableList<String> cbItens = FXCollections.observableArrayList(cities);
             this.cbSelectCity.setItems(cbItens);
+            this.cbSelectCity.getSelectionModel().select(0);
         } catch (FileNameIsEmptyException ex) {
             Logger.getLogger(SelectCityController.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -46,6 +46,9 @@ public class SelectCarController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.loadImages();
+        this.selectedCar = SpritesCars.JAGUAR;
+        this.imgRealCar.setImage(new Image(selectedCar.getBig()));
+        btnNext.setDisable(false);
     }
 
     private void loadImages() {
@@ -65,7 +68,6 @@ public class SelectCarController implements Initializable {
                 Platform.runLater(() -> {
                     lblCarName.setText(car.toString());
                     imgRealCar.setImage(new Image(car.getBig()));
-                    btnNext.setDisable(false);
                     selectedCar = car;
                     System.out.println("Selected car: " + car.name());
                 });

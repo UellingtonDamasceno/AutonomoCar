@@ -12,4 +12,7 @@ public class NullRoad extends Road{
         super(SpritesCity.NULL_ROAD.get(), posX, posY, posX, posY);
     }
     
+    public int getPostionX(){
+        return 0;
+    }
 }

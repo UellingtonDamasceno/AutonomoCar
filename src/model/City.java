@@ -16,11 +16,11 @@ public class City implements Serializable {
 
     private int dx, dy;
     private double height, width;
-    private int propotionX, propotionY;
+    private double propotionX, propotionY;
     private Road[][] city;
     private Graph graph;
 
-    public City(String name, int dx, int dy, int h, int w) {
+    public City(String name, int dx, int dy, double h, double w) {
         this.name = name;
 
         this.dx = dx;
@@ -71,11 +71,11 @@ public class City implements Serializable {
         return this.width;
     }
 
-    public int getPropotionX() {
+    public double getPropotionX() {
         return this.propotionX;
     }
 
-    public int getPropotionY() {
+    public double getPropotionY() {
         return this.propotionY;
     }
 
@@ -95,11 +95,11 @@ public class City implements Serializable {
         return !(this.getRoad(x, y) instanceof NullRoad);
     }
 
-    public int calculateRoadHeight(int posY) {
-        return this.propotionY * (posY + 1);
+    public double calculateRoadHeight(int posY) {
+        return this.propotionY * (posY)+ 1;
     }
 
-    public int calculateRoadWidth(int posX) {
+    public double calculateRoadWidth(int posX) {
         return this.propotionX * (posX + 1);
     }
 

@@ -1,5 +1,7 @@
 package util;
 
+import javafx.scene.paint.Color;
+
 /**
  *
  * @author Uellington Damasceno
@@ -24,8 +26,8 @@ public class Settings {
     public enum DefaultCity {
         HEIGHT("500"),
         WIDTH("500"),
-        COLUMNS("10"),
-        ROWS("10");
+        COLUMNS("5"),
+        ROWS("5");
 
         private final String value;
 
@@ -59,20 +61,22 @@ public class Settings {
     }
 
     public enum SpritesCars {
-        DODGE("black"),
-        SKYLINE("white"),
-        FERRARI("red"),
-        JAGUAR("blue"),
-        MERCEDES("grey"),
-        CAMARO("yellow");
+        DODGE("black", Color.BLACK),
+        SKYLINE("white", Color.WHITE),
+        FERRARI("red", Color.RED),
+        JAGUAR("blue", Color.BLUE),
+        MERCEDES("grey", Color.GREY),
+        CAMARO("yellow", Color.YELLOW);
 
         private final String tiny;
         private final String real;
         private final String ORIGIN = "/res/sprites/cars/";
-
-        private SpritesCars(String color) {
-            this.tiny = (ORIGIN + "small-" + color + ".png");
-            this.real = (ORIGIN + color + ".png");
+        private final Color color;
+        
+        private SpritesCars(String sprite, Color color) {
+            this.tiny = (ORIGIN + "small-" + sprite + ".png");
+            this.real = (ORIGIN + sprite + ".png");
+            this.color = color;
         }
 
         public String getSmall() {
@@ -81,6 +85,10 @@ public class Settings {
 
         public String getBig() {
             return this.real;
+        }
+        
+        public Color getColor(){
+            return this.color;
         }
     }
 
@@ -154,7 +162,8 @@ public class Settings {
     }
 
     public enum ActionBuilder {
-        CLICK,
+        PUT,
+        SELECT,
         ROTATE_LEFT,
         ROTATE_RIGHT;
     }

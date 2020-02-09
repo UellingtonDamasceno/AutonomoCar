@@ -117,7 +117,7 @@
                </children>
             </VBox>
             <Separator prefWidth="200.0" />
-            <VBox prefHeight="151.0" prefWidth="145.0" spacing="10.0">
+            <VBox fx:id="vboxSelectedRoadInfo" prefHeight="151.0" prefWidth="145.0" spacing="10.0">
                <children>
                   <Label prefHeight="16.0" prefWidth="161.0" text=" SELECTED ROAD" textAlignment="CENTER">
                      <font>
@@ -152,6 +152,10 @@
                   </VBox>
                   <Label fx:id="lblAdjacentSize" text="Adjacent: " />
                   <Label fx:id="lblRoadType" text="Type: " />
+                  <Label fx:id="lblp1" text="Type: " />
+                  <Label fx:id="lblp2" text="Type: " />
+                  <Label fx:id="lblp3" text="Type: " />
+                  <Label fx:id="lblp4" text="Type: " />
                </children>
             </VBox>
             <Separator prefWidth="145.0" />

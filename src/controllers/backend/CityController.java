@@ -8,6 +8,7 @@ import model.Road;
 import model.exceptions.EdgeExistException;
 import model.exceptions.VertexEqualsException;
 import model.exceptions.VertexNotExistException;
+import util.Point;
 import util.Settings.DefaultFile;
 import util.Settings.Orientation;
 
@@ -61,10 +62,11 @@ public class CityController {
     }
 
     public Road putRoad(String sprite, int x, int y) {
-        int roadHeight = this.city.calculateRoadHeight(y);
-        int roadWidth = this.city.calculateRoadWidth(x);
+        double roadHeight = this.city.calculateRoadHeight(y);
+        double roadWidth = this.city.calculateRoadWidth(x);
 
         Road road = new Road(sprite, x, y, roadHeight, roadWidth);
+        this.calculateSectorPoints(road);
 
         if (this.city.isEmpty(x, y) || !this.city.getRoad(x, y).equals(road)) {
             this.city.setRoad(road, x, y);
@@ -78,14 +80,12 @@ public class CityController {
             this.connectRoads(road, right, Orientation.EAST);
             this.connectRoads(road, left, Orientation.WEST);
             this.connectRoads(road, buttom, Orientation.SOUTH);
-
         }
 
         return road;
     }
 
     private void connectRoads(Road newRoad, Road oldRoad, Orientation orientation) {
-        boolean error = false;
         try {
             if (!(oldRoad instanceof NullRoad)) {
                 this.city.connectRoads(newRoad, oldRoad);
@@ -93,42 +93,33 @@ public class CityController {
                     case NORTH: {
                         newRoad.putUp();
                         oldRoad.putDown();
-                        System.out.println("north");
                         break;
                     }
-                    case SOUTH:{
+                    case SOUTH: {
                         newRoad.putDown();
                         oldRoad.putUp();
-                        System.out.println("south");
                         break;
                     }
-                    case EAST:{
+                    case EAST: {
                         newRoad.putRight();
                         oldRoad.putLeft();
-                        System.out.println("east");
                         break;
                     }
-                    case WEST:{
+                    case WEST: {
                         newRoad.putLeft();
                         oldRoad.putRight();
-                        System.out.println("west");
                         break;
                     }
                 }
             }
-        } catch (VertexEqualsException e) {
-            error = true;
-        } catch (EdgeExistException ex) {
-            error = true;
-        }
-
-        if (error) {
+        } catch (VertexEqualsException | EdgeExistException e) {
             try {
                 this.city.updateRoad(newRoad, oldRoad);
             } catch (VertexNotExistException ex1) {
                 Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
+
     }
 
     public void updateSprite(String sprite, int x, int y) {
@@ -143,5 +134,41 @@ public class CityController {
         } catch (VertexNotExistException ex) {
             Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void calculateSectorPoints(Road road) {
+        double coordX, coordY;
+
+        double propotionX = this.city.getPropotionX();
+        double propotionY = this.city.getPropotionY();
+
+        double offsetX = road.getPostionX();
+        double offsetY = road.getPostionY();
+
+        double x = (propotionX * offsetX);
+        double y = (propotionY * offsetY);
+
+        Point p2 = new Point();
+        Point p3 = new Point();
+
+        coordY = ((propotionX / 4) + x) - 50;
+        coordX = ((propotionY / 4) + y) - 5;
+        Point p1 = new Point(coordX, coordY);
+
+        p2.setY(coordY);
+        p3.setX(coordX);
+
+        coordY = (((3 * propotionX) / 4) + x) - 50;
+        coordX = (((3 * propotionY) / 4) + y) - 5;
+
+        p2.setX(coordX);
+        p3.setY(coordY);
+
+        Point p4 = new Point(coordX, coordY);
+
+        road.setSectorPoint(0, p1);
+        road.setSectorPoint(1, p2);
+        road.setSectorPoint(2, p3);
+        road.setSectorPoint(3, p4);
     }
 }

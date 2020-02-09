@@ -3,7 +3,6 @@ package facade;
 import controllers.backend.CarController;
 import controllers.backend.CityController;
 import controllers.backend.FileController;
-import java.awt.Point;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import model.Car;
@@ -101,11 +100,11 @@ public class FacadeBackend {
         this.fileCoontroller.writerObject(directory, city);
     }
 
-    public int getPropotionX() {
+    public double getPropotionX() {
        return this.cityController.getCity().getPropotionX();
     }
 
-    public int getPropotionY() {
+    public double getPropotionY() {
         return this.cityController.getCity().getPropotionY();
     }
 }

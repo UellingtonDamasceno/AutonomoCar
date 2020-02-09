@@ -5,8 +5,8 @@ import java.util.Observable;
 import java.util.Observer;
 import model.states.Single;
 import org.json.JSONObject;
+import util.Point;
 import util.RoadState;
-import util.Settings.RoadsTypes;
 
 /**
  *
@@ -15,81 +15,102 @@ import util.Settings.RoadsTypes;
 public class Road implements Observer, Serializable {
 
     private String sprite;
-    private RoadsTypes type;
-    
-    private RoadState state;
-    
-    private int positionX, positionY;
-    private int height, width;
 
-    public Road(String sprite, int posX, int posY, int h, int w){
-        this(sprite, posX, posY, h, w, RoadsTypes.SINGLE);
-    }
-    
-    public Road(String sprite, int posX, int posY, int h, int w, RoadsTypes type) {
+    private RoadState state;
+
+    private int positionX, positionY;
+    private double height, width;
+    private Point[] sectorPoints;
+
+    public Road(String sprite, int posX, int posY, double h, double w) {
         this.sprite = sprite;
         this.positionX = posX;
         this.positionY = posY;
         this.height = h;
         this.width = w;
         this.state = new Single();
+        this.calculateSectorPosition();
+        this.sectorPoints = new Point[4];
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public double getWidth() {
+        return width;
     }
 
     public String getSprite() {
         return this.sprite;
     }
-    
-    public String getType(){
+
+    public String getType() {
         return this.state.getType();
     }
 
-    public double getWidth() {
-        return this.width;
+    public int getPostionY() {
+        return this.positionX;
     }
 
-    public double getHeight() {
-        return this.height;
+    public int getPostionX() {
+        return this.positionY;
     }
 
     public void setSprite(String sprite) {
         this.sprite = sprite;
     }
 
-    public void setType(RoadsTypes type){
-        this.type = type;
+    private void calculateSectorPosition() {
+        if (!(this instanceof NullRoad)) {
+
+        }
     }
-    
-    public void putUp(){
+
+    public void putUp() {
         this.state = this.state.putUp();
     }
-    
-    public void putDown(){
+
+    public void putDown() {
         this.state = this.state.putDown();
     }
-    
-    public void putLeft(){
+
+    public void putLeft() {
         this.state = this.state.putLeft();
     }
-    
-    public void putRight(){
+
+    public void putRight() {
         this.state = this.state.putRight();
     }
-    
-    public void removeUp(){
+
+    public void removeUp() {
         this.state = this.state.removeUp();
     }
-    
-    public void removeDown(){
+
+    public void removeDown() {
         this.state = this.state.removeDown();
     }
-    
-    public void removeLeft(){
+
+    public void removeLeft() {
         this.state = this.state.removeLeft();
     }
-    
-    public void removeRight(){
+
+    public void removeRight() {
         this.state = this.state.removeRight();
     }
+
+    public void setSectorPoint(Point[] points){
+        this.sectorPoints = points;
+    }
+    
+    public void setSectorPoint(int position, Point point) {
+        this.sectorPoints[position] = point;
+    }
+
+    public Point[] getSectors() {
+        return this.sectorPoints;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
 
@@ -97,8 +118,8 @@ public class Road implements Observer, Serializable {
 
     @Override
     public int hashCode() {
-        String value = Integer.toString(this.height);
-        value = Integer.toString(this.width) + value;
+        String value = Double.toString(this.height);
+        value = Double.toString(this.width) + value;
         value = Integer.toString(this.positionX) + value;
         value = value + Integer.toString(this.positionY) + value;
         return value.hashCode();
@@ -119,17 +140,18 @@ public class Road implements Observer, Serializable {
         JSONObject jsonObject = new JSONObject();
         JSONObject jsonArray = new JSONObject();
 
-        jsonObject.accumulate("Sprite", sprite.substring(sprite.lastIndexOf("/")));
+//        jsonObject.accumulate("Sprite", sprite.substring(sprite.lastIndexOf("/")));
 //        jsonObject.accumulate("sprite", this.sprite);
         //jsonObject.accumulate("roadName", this.name);
         jsonArray.accumulate("x", this.positionX);
         jsonArray.accumulate("y", this.positionY);
         jsonObject.accumulate("position", jsonArray);
 
-//        jsonArray = new JSONObject();
-//        jsonArray.accumulate("height", this.height);
-//        jsonArray.accumulate("width", this.width);
-//        jsonObject.accumulate("dimension", jsonArray);
+        jsonArray = new JSONObject();
+        jsonArray.accumulate("height", this.height);
+        jsonArray.accumulate("width", this.width);
+        jsonObject.accumulate("dimension", jsonArray);
         return jsonObject.toString();
     }
+
 }
