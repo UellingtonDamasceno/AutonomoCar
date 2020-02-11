@@ -10,11 +10,11 @@ import util.RoadState;
 public class HRoadUp implements RoadState, Serializable {
 
     private RoadState lastState;
-    
-    public HRoadUp(RoadState lastState){
+
+    public HRoadUp(RoadState lastState) {
         this.lastState = lastState;
     }
-    
+
     @Override
     public RoadState putUp() {
         return new TrunRightInverse(this);
@@ -60,5 +60,8 @@ public class HRoadUp implements RoadState, Serializable {
         return "HRoadUp";
     }
 
-    
+    @Override
+    public boolean isCriticalArea() {
+        return false;
+    }
 }

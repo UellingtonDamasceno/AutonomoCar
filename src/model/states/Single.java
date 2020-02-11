@@ -54,4 +54,8 @@ public class Single implements RoadState, Serializable {
         return "Single";
     }
 
+    @Override
+    public boolean isCriticalArea() {
+        return false;
+    }
 }

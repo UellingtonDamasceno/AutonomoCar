@@ -18,6 +18,5 @@ public interface RoadState {
     public RoadState removeLeft();
     public RoadState removeRight();
     
-//    public Iterator<Double> getRight(Road road);
-//    public Iterator<Double> getLeft(Road road);
+    public boolean isCriticalArea();
 }

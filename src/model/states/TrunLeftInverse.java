@@ -65,4 +65,8 @@ public class TrunLeftInverse implements RoadState, Serializable {
         return "TrunLeftInverse";
     }
 
+    @Override
+    public boolean isCriticalArea() {
+        return false;
+    }
 }

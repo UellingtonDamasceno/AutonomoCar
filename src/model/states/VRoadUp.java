@@ -7,7 +7,7 @@ import util.RoadState;
  *
  * @author uellington
  */
-public class VRoadUp implements RoadState, Serializable{
+public class VRoadUp implements RoadState, Serializable {
 
     private RoadState lastState;
 
@@ -60,4 +60,8 @@ public class VRoadUp implements RoadState, Serializable{
         return "VRoadUp";
     }
 
+    @Override
+    public boolean isCriticalArea() {
+        return false;
+    }
 }

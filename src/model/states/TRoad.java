@@ -59,4 +59,9 @@ public class TRoad implements RoadState, Serializable {
     public String getType() {
         return "TRoad";
     }
+
+    @Override
+    public boolean isCriticalArea() {
+        return true;
+    }
 }

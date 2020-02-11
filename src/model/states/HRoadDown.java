@@ -27,12 +27,12 @@ public class HRoadDown implements RoadState, Serializable {
 
     @Override
     public RoadState putDown() {
-        return new TRoad(this);
+        return new TrunRight(this);
     }
 
     @Override
     public RoadState putLeft() {
-        return new HRoadDown(this);
+        return new ConnectorHRoad(this);
     }
 
     @Override
@@ -65,4 +65,8 @@ public class HRoadDown implements RoadState, Serializable {
         return "HRoadDown";
     }
 
+    @Override
+    public boolean isCriticalArea() {
+        return false;
+    }
 }

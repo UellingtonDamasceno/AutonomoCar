@@ -57,6 +57,11 @@ public class TRightRoad implements RoadState, Serializable {
 
     @Override
     public String getType() {
-        return "TrunRightRoad";
+        return "TRightRoad";
+    }
+
+    @Override
+    public boolean isCriticalArea() {
+        return true;
     }
 }

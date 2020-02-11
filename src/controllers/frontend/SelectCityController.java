@@ -54,7 +54,7 @@ public class SelectCityController implements Initializable {
     @FXML
     private void next(ActionEvent event) {
         try {
-            FacadeBackend.getInstance().setCity(cbSelectCity.getSelectionModel().getSelectedItem());
+            FacadeBackend.getInstance().loadCity(cbSelectCity.getSelectionModel().getSelectedItem());
             FacadeFrontend.getInstance().changeScreean(Scenes.ROADS);
         } catch (Exception ex) {
             Logger.getLogger(SelectCityController.class.getName()).log(Level.SEVERE, null, ex);

@@ -1,100 +1,88 @@
 package model;
 
-import java.net.SocketException;
-import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
-import util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.paint.Color;
 import util.Point;
 import util.Settings.Orientation;
+import static util.Settings.Orientation.EAST;
+import static util.Settings.Orientation.NORTH;
+import static util.Settings.Orientation.SOUTH;
+import static util.Settings.Orientation.WEST;
 import util.Settings.SpritesCars;
 
 /**
  *
  * @author uellington
  */
-public class Car extends Observable implements Runnable, Observer {
+public class Car implements Runnable, Observer{
 
     private SpritesCars car;
-    private String cityName;
-    private Point originPoint, currentPosition;
+    private final String cityName;
 
-    private Connection connection;
+    private final Connection connection; // pode ser que dê erro o fato dela ser final!!! Faça o teste!!
 
-    private Vertex<Road> oldVertex, currentVertex, nextVertex;
-    private Orientation front;
+    private GPS gps;
+
     private boolean stop;
 
-    public Car(SpritesCars car, String cityName, Point origin) {
+    public Car(SpritesCars car, String cityName) {
         this.car = car;
         this.cityName = cityName;
-        this.originPoint = origin;
         this.stop = true;
         this.connection = new Connection();
+        this.gps = new GPS(this);
+        this.addObserver(this);
     }
 
-    public void initialize() throws SocketException {
-        this.connection.initialize();
+    public void initialize() {
+//        this.connection.initialize();
+        this.gps.loadInitialSettings();
+    }
+
+    public void addObserver(Observer observer) {
+        this.gps.addObserver(observer);
+    }
+
+    public void setOriginVertex(Vertex vertex) {
+        this.gps.setCurrentVertex(vertex);
+    }
+
+    public void setMap(Graph graph) {
+        this.gps.setMap(graph);
+    }
+
+    public void setOriginPoint(Point spawnPoint) {
+        this.gps.setCurrentPosition(spawnPoint);
     }
 
     public String getSprite() {
         return car.getSmall();
     }
 
-    public Color getColor(){
+    public Color getColor() {
         return this.car.getColor();
-    }
-    
-    public Point getOriginPosition() {
-        return this.originPoint;
     }
 
     public Point getCurrentPosition() {
-        return this.currentPosition;
+        return this.gps.getCurrentPosition();
     }
 
     public void setStop(boolean stop) {
         this.stop = stop;
     }
 
-    public void setFront(Orientation front) {
-        this.front = front;
-    }
-
-    public void setCurrentVertex(Vertex vertex) {
-        this.currentVertex = vertex;
-    }
-    
-    public void setOriginPoint(double x, double y) {
-        this.setOriginPoint(new Point(x, y));
-    }
-
-    public void setOriginPoint(Point point) {
-        this.originPoint = point;
-    }
-
-    public void setCurrentPosition(double x, double y) {
-        this.currentPosition = new Point(x, y);
-    }
-
     public void start() {
         if (stop) {
             stop = false;
             new Thread(this).start();
-            System.out.println("Andando...");
-            System.out.println("X: " + this.currentPosition.getX() + "y: " + this.currentPosition.getY());
         }
     }
 
-    public void updatePosition(int x, int y) {
-        this.currentPosition.setX(x);
-        this.currentPosition.setY(y);
-
-        this.setChanged();
-        this.notifyObservers(currentPosition);
+    public void updatePosition(double x, double y) {
+        this.gps.updatePosition(x, y);
 
 //        try {
 //            this.connection.send(sprite);
@@ -105,27 +93,51 @@ public class Car extends Observable implements Runnable, Observer {
 //        }
     }
 
+    private void up() {
+        double cx = this.gps.getCurrentPosition().getX().get();
+        double cy = this.gps.getCurrentPosition().getY().get();
+        this.updatePosition(cx, (cy -= 1));
+    }
+
+    private void down() {
+        double cx = this.gps.getCurrentPosition().getX().get();
+        double cy = this.gps.getCurrentPosition().getY().get();
+        this.updatePosition(cx, (cy += 1));
+
+    }
+
+    private void trunRight() {
+        double cx = this.gps.getCurrentPosition().getX().get();
+        double cy = this.gps.getCurrentPosition().getY().get();
+        this.updatePosition((cx += 1), cy);
+    }
+
+    private void trunLeft() {
+        double cx = this.gps.getCurrentPosition().getX().get();
+        double cy = this.gps.getCurrentPosition().getY().get();
+        this.updatePosition((cx -= 1), cy);
+    }
+
     @Override
     public void run() {
-        this.front = this.getNextOrientation();
+        Orientation front = this.gps.getFront();
+        Point nextPoint, currentPoint;
         while (!stop) {
-            int cx = (int) this.currentPosition.getX();
-            int cy = (int) this.currentPosition.getY();
             switch (front) {
                 case NORTH: {
-                    this.updatePosition(cx, (cy -= 1));
+                    this.up();
                     break;
                 }
                 case SOUTH: {
-                    this.updatePosition(cx, (cy += 1));
+                    this.down();
                     break;
                 }
                 case EAST: {
-                    this.updatePosition((cx += 1), cy);
+                    this.trunRight();
                     break;
                 }
                 case WEST: {
-                    this.updatePosition((cx -= 1), cy);
+                    this.trunLeft();
                     break;
                 }
             }
@@ -135,49 +147,14 @@ public class Car extends Observable implements Runnable, Observer {
                 this.stop = false;
                 Logger.getLogger(Car.class.getName()).log(Level.SEVERE, null, ex);
             }
+            nextPoint = this.gps.getNextPosition();
+            currentPoint = this.getCurrentPosition();
+            front = this.gps.getOrientation(currentPoint, nextPoint);
         }
-    }
-
-    private Orientation getNextOrientation() {
-        Road currentRoad = this.currentVertex.get();
-        int adjacent = this.currentVertex.degree();
-        
-        int random = Random.randomize(1, adjacent);
-        
-        Iterator<Vertex<Road>> iterator = currentVertex.iterator();
-        Vertex<Road> nextVertex = currentVertex; //= NullVertex();
-
-        for (int i = 0; i <= random; i++) {
-            nextVertex = iterator.next();
-        }
-
-        this.nextVertex = nextVertex;
-        return this.getOrientation(currentRoad, nextVertex.get());
-    }
-
-    private Orientation getOrientation(Road current, Road next) {
-        int cx = current.getPostionX();
-        int cy = current.getPostionY();
-        int nx = next.getPostionX();
-        int ny = next.getPostionY();
-
-        Orientation orientation;
-
-        if (nx > cx) {
-            orientation = Orientation.EAST;
-        } else if (nx < cx) {
-            orientation = Orientation.WEST;
-        } else if (ny > cy) {
-            orientation = Orientation.SOUTH;
-        } else {
-            orientation = Orientation.NORTH;
-        }
-        return orientation;
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void update(Observable o, Object o1) {
+        
     }
-    
 }

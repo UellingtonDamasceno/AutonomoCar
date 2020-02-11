@@ -59,4 +59,9 @@ public class TLeftRoad implements RoadState, Serializable {
     public String getType() {
         return "TLeftRoad";
     }
+
+    @Override
+    public boolean isCriticalArea() {
+        return true;
+    }
 }

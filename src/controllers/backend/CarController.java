@@ -18,15 +18,11 @@ public class CarController {
     public Car getCar() {
         return this.car;
     }
-    
-//    public Orientation getFront(){
-//        return car.getStartOrientation();
-//    }
 
     public Car createCar(SpritesCars selectedCar, String cityName) {
         switch(selectedCar){
             default:{
-                return new Car(selectedCar, cityName, new Point(0, 0));
+                return new Car(selectedCar, cityName);
             }
         }
     }

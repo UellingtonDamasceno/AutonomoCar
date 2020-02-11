@@ -59,4 +59,9 @@ public class TrunLeft implements RoadState, Serializable {
     public String getType() {
         return "TrunLeft";
     }
+
+    @Override
+    public boolean isCriticalArea() {
+        return false;
+    }
 }

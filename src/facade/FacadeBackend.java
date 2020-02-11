@@ -42,10 +42,12 @@ public class FacadeBackend {
         this.cityController.createCity(name, x, y, height, width, prop);
     }
 
-    public void setCity(String cityName) throws IOException, FileNotFoundException, ClassNotFoundException {
+    public void loadCity(String cityName) throws IOException, FileNotFoundException, ClassNotFoundException {
         String cityPath = this.cityController.getLocationToSave(cityName);
         City city = (City) this.fileCoontroller.readObject(cityPath);
         this.cityController.setCity(city);
+        city.loadPoints();
+        this.carController.getCar().setMap(city.getGraph());
     }
 
     public void setCar(SpritesCars selectedCar) {

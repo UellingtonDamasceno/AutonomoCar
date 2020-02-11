@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -20,6 +21,7 @@ public class StageController {
         this.stages = new HashMap();
         this.container = new Pane();
         this.stages.put("mainStage", mainStage);
+//        mainStage.initStyle(StageStyle.TRANSPARENT);
     }
     
     public double getStageY(){

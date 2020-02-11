@@ -7,7 +7,7 @@ import util.RoadState;
  *
  * @author uellington
  */
-public class XRoad implements RoadState, Serializable{
+public class XRoad implements RoadState, Serializable {
 
     private RoadState lastState;
 
@@ -58,6 +58,11 @@ public class XRoad implements RoadState, Serializable{
     @Override
     public String getType() {
         return "XRoad";
+    }
+
+    @Override
+    public boolean isCriticalArea() {
+        return true;
     }
 
 }

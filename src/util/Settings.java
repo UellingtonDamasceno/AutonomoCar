@@ -90,6 +90,24 @@ public class Settings {
         public Color getColor(){
             return this.color;
         }
+        
+        public static Color getColor(String name){
+            switch(name){
+                case "black": {
+                    return SpritesCars.DODGE.getColor();
+                }case "white":{
+                    return SpritesCars.SKYLINE.getColor();
+                }case "red": {
+                    return SpritesCars.FERRARI.getColor();
+                }case "grey": {
+                    return SpritesCars.MERCEDES.getColor();
+                }case "blue":{
+                    return SpritesCars.JAGUAR.getColor();
+                }default:{
+                    return SpritesCars.CAMARO.getColor();
+                }
+            }
+        }
     }
 
     public enum SpritesCity {
@@ -169,10 +187,35 @@ public class Settings {
     }
 
     public enum Orientation {
-        NORTH,
-        SOUTH,
-        EAST,
-        WEST
+        NORTH("north", "south", "west"),
+        SOUTH("south", "north", "east"),
+        EAST("east", "west", "north"),
+        WEST("west", "east", "south");
+        
+        private final String direction, oppositeDirection, forbidden;
+        
+        private Orientation(String direction, String oppositeDirection, String forbidden){
+            this.direction = direction;
+            this.oppositeDirection = oppositeDirection;
+            this.forbidden = forbidden;
+        }
+        
+        public String getDirection(){
+            return this.direction;
+        }
+        
+        public String getOppositeDirection(){
+            return this.oppositeDirection;
+        }
+        
+        public boolean isForbidden(Orientation destiny){
+            return this.forbidden.equals(destiny.getDirection());
+        }
+        
+        @Override 
+        public String toString(){
+            return this.direction;
+        };
     }
 
     public enum Scenes {

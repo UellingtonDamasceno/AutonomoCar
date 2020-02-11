@@ -1,6 +1,8 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Observable;
+import java.util.Observer;
 import model.exceptions.EdgeExistException;
 import model.exceptions.VertexEqualsException;
 import model.exceptions.VertexNotExistException;
@@ -10,15 +12,15 @@ import org.json.JSONObject;
  *
  * @author uellington
  */
-public class City implements Serializable {
+public class City implements Serializable, Observer {
 
-    private String name;
+    private final String name;
 
     private int dx, dy;
     private double height, width;
     private double propotionX, propotionY;
     private Road[][] city;
-    private Graph graph;
+    private Graph<Road, Transition> graph;
 
     public City(String name, int dx, int dy, double h, double w) {
         this.name = name;
@@ -32,11 +34,9 @@ public class City implements Serializable {
         this.propotionX = (w / dx);
         this.propotionY = (h / dy);
 
-        this.graph = new Graph();
+        this.graph = new Graph<>();
         this.city = new Road[dx][dy];
         this.initialize(dx, dy);
-        System.out.println(this);
-
     }
 
     private void initialize(int x, int y) {
@@ -46,7 +46,7 @@ public class City implements Serializable {
             }
         }
     }
-    
+
     public Graph getGraph() {
         return this.graph;
     }
@@ -96,15 +96,17 @@ public class City implements Serializable {
     }
 
     public double calculateRoadHeight(int posY) {
-        return this.propotionY * (posY)+ 1;
+        return this.propotionY * (posY) + 1;
     }
 
     public double calculateRoadWidth(int posX) {
         return this.propotionX * (posX + 1);
     }
 
-    public void connectRoads(Road a, Road b) throws VertexEqualsException, EdgeExistException {
-        Edge edge = graph.put(a, b);
+    public void connectRoads(Road a, Road b, Transition t) throws VertexEqualsException, EdgeExistException {
+        graph.put(a, b, t);
+        Edge edge = this.graph.getEdge(a, b);
+        System.out.println(edge);
     }
 
     public void updateRoad(Road a, Road b) throws VertexNotExistException {
@@ -138,5 +140,20 @@ public class City implements Serializable {
         city.accumulate("width", width);
 
         return city.toString();
+    }
+
+    public void loadPoints() {
+        for (int i = 0; i < dx; i++) {
+            for (int j = 0; j < dy; j++) {
+                if (!(city[i][j] instanceof NullRoad)) {
+                    city[i][j].load();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void update(Observable o, Object o1) {
+        
     }
 }

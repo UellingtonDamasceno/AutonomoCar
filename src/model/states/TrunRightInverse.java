@@ -54,10 +54,14 @@ public class TrunRightInverse implements RoadState, Serializable {
     public RoadState removeRight() {
         return (lastState == null) ? new VRoadDown(null) : lastState;
     }
-    
+
     @Override
-    public String getType(){
+    public String getType() {
         return "TrunRightInverse";
     }
 
+    @Override
+    public boolean isCriticalArea() {
+        return false;
+    }
 }

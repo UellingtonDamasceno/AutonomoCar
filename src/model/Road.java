@@ -17,11 +17,11 @@ public class Road implements Observer, Serializable {
     private String sprite;
 
     private RoadState state;
-
-    private int positionX, positionY;
-    private double height, width;
+    private final int positionX, positionY;
+    private final double height, width;
     private Point[] sectorPoints;
-
+    
+    
     public Road(String sprite, int posX, int posY, double h, double w) {
         this.sprite = sprite;
         this.positionX = posX;
@@ -29,10 +29,14 @@ public class Road implements Observer, Serializable {
         this.height = h;
         this.width = w;
         this.state = new Single();
-        this.calculateSectorPosition();
         this.sectorPoints = new Point[4];
     }
 
+    public boolean isCriticalArea(){
+        return this.state.isCriticalArea();
+    }
+
+    
     public double getHeight() {
         return height;
     }
@@ -50,23 +54,17 @@ public class Road implements Observer, Serializable {
     }
 
     public int getPostionY() {
-        return this.positionX;
+        return this.positionY;
     }
 
     public int getPostionX() {
-        return this.positionY;
+        return this.positionX;
     }
 
     public void setSprite(String sprite) {
         this.sprite = sprite;
     }
-
-    private void calculateSectorPosition() {
-        if (!(this instanceof NullRoad)) {
-
-        }
-    }
-
+    
     public void putUp() {
         this.state = this.state.putUp();
     }
@@ -110,6 +108,10 @@ public class Road implements Observer, Serializable {
     public Point[] getSectors() {
         return this.sectorPoints;
     }
+    
+    public Point getSector(int position){
+        return this.sectorPoints[position];
+    }
 
     @Override
     public void update(Observable o, Object arg) {
@@ -147,11 +149,16 @@ public class Road implements Observer, Serializable {
         jsonArray.accumulate("y", this.positionY);
         jsonObject.accumulate("position", jsonArray);
 
-        jsonArray = new JSONObject();
-        jsonArray.accumulate("height", this.height);
-        jsonArray.accumulate("width", this.width);
-        jsonObject.accumulate("dimension", jsonArray);
+//        jsonArray = new JSONObject();
+//        jsonArray.accumulate("height", this.height);
+//        jsonArray.accumulate("width", this.width);
+//        jsonObject.accumulate("dimension", jsonArray);
         return jsonObject.toString();
     }
-
+    
+    public void load(){
+        for (Point sectorPoint : sectorPoints) {
+            sectorPoint.load();
+        }
+    }
 }

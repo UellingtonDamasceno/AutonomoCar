@@ -63,4 +63,8 @@ public class TRoadInverse implements RoadState, Serializable {
         return "TRoadInverse";
     }
 
+    @Override
+    public boolean isCriticalArea() {
+        return true;
+    }
 }

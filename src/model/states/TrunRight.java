@@ -7,7 +7,7 @@ import util.RoadState;
  *
  * @author uellington
  */
-public class TrunRight implements RoadState, Serializable{
+public class TrunRight implements RoadState, Serializable {
 
     private RoadState lastState;
 
@@ -58,5 +58,10 @@ public class TrunRight implements RoadState, Serializable{
     @Override
     public String getType() {
         return "TrunRight";
+    }
+
+    @Override
+    public boolean isCriticalArea() {
+        return false;
     }
 }
