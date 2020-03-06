@@ -13,6 +13,10 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextField;
+import middleware.Connection;
+import middleware.Router;
+import util.Settings;
 import util.Settings.Scenes;
 
 /**
@@ -22,18 +26,23 @@ import util.Settings.Scenes;
  */
 public class MainController implements Initializable {
 
+    @FXML
+    private TextField lblPort;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+        this.lblPort.setText(Settings.DefaultConnection.DEFAULT_PORT.getStringValue());
+    }
 
     @FXML
     private void setStartScene(ActionEvent event) {
         try {
-            FacadeFrontend.getInstance().changeScreean(Scenes.SELECT_CAR);
+            Connection.getInstance().initialize(Integer.parseInt(lblPort.getText()));
+            Connection.getInstance().addObserver(Router.getInstance());
+            FacadeFrontend.getInstance().changeScreean(Scenes.SELECT_CITY);
         } catch (Exception ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -47,5 +56,5 @@ public class MainController implements Initializable {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

@@ -1,28 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package model.states;
+package model.states.road;
 
 import java.io.Serializable;
 import util.RoadState;
+import util.Settings.RoadTypes;
 
 /**
  *
  * @author uellington
  */
-public class ConnectorVRoad implements RoadState, Serializable {
+public class VRoadUp implements RoadState, Serializable {
 
     private RoadState lastState;
 
-    public ConnectorVRoad(RoadState lastState) {
+    protected VRoadUp(RoadState lastState) {
         this.lastState = lastState;
     }
 
     @Override
-    public String getType() {
-        return "ConnectorVRoad";
+    public RoadTypes getType() {
+        return RoadTypes.VERTICAL;
     }
 
     @Override
@@ -37,12 +33,12 @@ public class ConnectorVRoad implements RoadState, Serializable {
 
     @Override
     public RoadState putLeft() {
-        return new TLeftRoad(this);
+        return new TrunLeftInverse(this);
     }
 
     @Override
     public RoadState putRight() {
-        return new TRightRoad(this);
+        return new TrunRightInverse(this);
     }
 
     @Override
@@ -52,7 +48,7 @@ public class ConnectorVRoad implements RoadState, Serializable {
 
     @Override
     public RoadState removeDown() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (lastState == null) ? new Single() : lastState;
     }
 
     @Override

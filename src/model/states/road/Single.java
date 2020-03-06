@@ -1,38 +1,40 @@
-package model.states;
+package model.states.road;
 
 import java.io.Serializable;
+import java.util.List;
 import util.RoadState;
+import util.Settings;
+import util.Settings.RoadTypes;
 
 /**
  *
  * @author uellington
  */
-public class HRoadUp implements RoadState, Serializable {
-
-    private RoadState lastState;
-
-    public HRoadUp(RoadState lastState) {
-        this.lastState = lastState;
-    }
+public class Single implements RoadState, Serializable {
 
     @Override
+    public RoadTypes getType() {
+        return RoadTypes.SINGLE;
+    }
+    
+    @Override
     public RoadState putUp() {
-        return new TrunRightInverse(this);
+        return new VRoadUp(this);
     }
 
     @Override
     public RoadState putDown() {
-        return new TrunLeft(this);
+        return new VRoadDown(this);
     }
 
     @Override
     public RoadState putLeft() {
-        return new ConnectorHRoad(this);
+        return new HRoadUp(this);
     }
 
     @Override
     public RoadState putRight() {
-        return new ConnectorHRoad(this);
+        return new HRoadDown(this);
     }
 
     @Override
@@ -47,17 +49,12 @@ public class HRoadUp implements RoadState, Serializable {
 
     @Override
     public RoadState removeLeft() {
-        return (lastState == null) ? new Single() : lastState;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public RoadState removeRight() {
-        return (lastState == null) ? new Single() : lastState;
-    }
-
-    @Override
-    public String getType() {
-        return "HRoadUp";
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

@@ -1,32 +1,46 @@
-package model.states;
+package model.states.road;
 
 import java.io.Serializable;
+import java.util.List;
 import util.RoadState;
+import util.Settings;
+import util.Settings.RoadTypes;
 
 /**
  *
  * @author uellington
  */
-public class Single implements RoadState, Serializable {
+public class ConnectorHRoad implements RoadState, Serializable {
+
+    private RoadState lastState;
+
+    public ConnectorHRoad(RoadState lastState) {
+        this.lastState = lastState;
+    }
+
+    @Override
+    public RoadTypes getType() {
+        return RoadTypes.HORIZONTAL;
+    }
 
     @Override
     public RoadState putUp() {
-        return new VRoadUp(this);
+        return new TRoadInverse(this);
     }
 
     @Override
     public RoadState putDown() {
-        return new VRoadDown(this);
+        return new TRoad(this);
     }
 
     @Override
     public RoadState putLeft() {
-        return new HRoadUp(this);
+        return new ConnectorHRoad(this);
     }
 
     @Override
     public RoadState putRight() {
-        return new HRoadDown(this);
+        return new ConnectorHRoad(this);
     }
 
     @Override
@@ -47,11 +61,6 @@ public class Single implements RoadState, Serializable {
     @Override
     public RoadState removeRight() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getType() {
-        return "Single";
     }
 
     @Override

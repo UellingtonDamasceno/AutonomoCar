@@ -1,7 +1,8 @@
-package model.states;
+package model.states.road;
 
 import java.io.Serializable;
 import util.RoadState;
+import util.Settings.RoadTypes;
 
 /**
  *
@@ -13,6 +14,11 @@ public class XRoad implements RoadState, Serializable {
 
     public XRoad(RoadState lastState) {
         this.lastState = lastState;
+    }
+
+    @Override
+    public RoadTypes getType() {
+        return RoadTypes.X;
     }
 
     @Override
@@ -53,11 +59,6 @@ public class XRoad implements RoadState, Serializable {
     @Override
     public RoadState removeRight() {
         return (lastState == null) ? new TLeftRoad(null) : lastState;
-    }
-
-    @Override
-    public String getType() {
-        return "XRoad";
     }
 
     @Override

@@ -9,6 +9,8 @@ import model.Car;
 import model.City;
 import model.Road;
 import model.exceptions.FileNameIsEmptyException;
+import model.exceptions.OfflineException;
+import util.Point;
 import util.Settings.DefaultFile;
 import util.Settings.SpritesCars;
 
@@ -22,7 +24,7 @@ public class FacadeBackend {
 
     private CarController carController;
     private CityController cityController;
-    private FileController fileCoontroller;
+    private final FileController fileCoontroller;
 
     private FacadeBackend() {
         this.carController = new CarController();
@@ -47,17 +49,25 @@ public class FacadeBackend {
         City city = (City) this.fileCoontroller.readObject(cityPath);
         this.cityController.setCity(city);
         city.loadPoints();
-        this.carController.getCar().setMap(city.getGraph());
     }
 
-    public void setCar(SpritesCars selectedCar) {
-        String cityName = this.cityController.getCity().getName();
-        Car car = this.carController.createCar(selectedCar, cityName);
-        this.carController.setCar(car);
+    public Car createCar(SpritesCars selectedCar) {
+        City city = this.cityController.getCity();
+        Car car = this.carController.createCar(selectedCar);
+        car.setMap(city.getGraph());
+        return car;
+    }
+
+    public void setMainCar(Car car) {
+        this.carController.setMainCar(car);
+    }
+
+    public Point putNewCar(String id, Point point) {
+        return this.carController.putNewCar(id, point);
     }
 
     public Car getSelectedCar() {
-        return this.carController.getCar();
+        return this.carController.getMainCar();
     }
 
     public City getCity() {
@@ -103,10 +113,23 @@ public class FacadeBackend {
     }
 
     public double getPropotionX() {
-       return this.cityController.getCity().getPropotionX();
+        return this.cityController.getCity().getPropotionX();
     }
 
     public double getPropotionY() {
         return this.cityController.getCity().getPropotionY();
     }
+
+    public void start() throws IOException, OfflineException {
+        this.carController.getMainCar().start();
+    }
+
+    public void removeCar(String id) {
+        this.carController.removeCar(id);
+    }
+
+    public void updatePosition(String id, Point point, int velocity) {
+        this.carController.updatePosition(id, point, velocity);
+    }
+
 }

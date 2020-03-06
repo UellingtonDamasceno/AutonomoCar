@@ -1,18 +1,24 @@
-package model.states;
+package model.states.road;
 
 import java.io.Serializable;
 import util.RoadState;
+import util.Settings.RoadTypes;
 
 /**
  *
  * @author uellington
  */
-public class TRoadInverse implements RoadState, Serializable {
+public class TRightRoad implements RoadState, Serializable {
 
     private RoadState lastState;
 
-    public TRoadInverse(RoadState lastState) {
+    public TRightRoad(RoadState lastState) {
         this.lastState = lastState;
+    }
+
+    @Override
+    public RoadTypes getType() {
+        return RoadTypes.T_RIGHT;
     }
 
     @Override
@@ -22,12 +28,12 @@ public class TRoadInverse implements RoadState, Serializable {
 
     @Override
     public RoadState putDown() {
-        return new XRoad(this);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public RoadState putLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new XRoad(this);
     }
 
     @Override
@@ -37,30 +43,22 @@ public class TRoadInverse implements RoadState, Serializable {
 
     @Override
     public RoadState removeUp() {
-        lastState = (lastState == null) ? new HRoadUp(null) : lastState;
-        return lastState;
+        return (lastState == null) ? new TrunRight(null) : lastState;
     }
 
     @Override
     public RoadState removeDown() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (lastState == null) ? new TrunRightInverse(null) : lastState;
     }
 
     @Override
     public RoadState removeLeft() {
-        lastState = (lastState == null) ? new TrunRightInverse(null) : lastState;
-        return lastState;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public RoadState removeRight() {
-        lastState = (lastState == null) ? new TrunLeftInverse(null) : lastState;
-        return lastState;
-    }
-
-    @Override
-    public String getType() {
-        return "TRoadInverse";
+        return (lastState == null) ? new VRoadUp(null) : lastState;
     }
 
     @Override

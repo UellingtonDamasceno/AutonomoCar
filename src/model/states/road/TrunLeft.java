@@ -1,43 +1,44 @@
-package model.states;
+package model.states.road;
 
 import java.io.Serializable;
 import util.RoadState;
+import util.Settings;
 
 /**
  *
  * @author uellington
  */
-public class ConnectorHRoad implements RoadState, Serializable {
+public class TrunLeft implements RoadState, Serializable {
 
     private RoadState lastState;
 
-    public ConnectorHRoad(RoadState lastState) {
+    protected TrunLeft(RoadState lastState) {
         this.lastState = lastState;
     }
 
     @Override
-    public String getType() {
-        return "ConnectorHRoad";
+    public Settings.RoadTypes getType() {
+        return Settings.RoadTypes.L_UP_LEFT;
     }
 
     @Override
     public RoadState putUp() {
-        return new TRoadInverse(this);
+        return new TLeftRoad(this);
     }
 
     @Override
     public RoadState putDown() {
-        return new TRoad(this);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public RoadState putLeft() {
-        return new ConnectorHRoad(this);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public RoadState putRight() {
-        return new ConnectorHRoad(this);
+        return new TRoad(this);
     }
 
     @Override
@@ -47,12 +48,12 @@ public class ConnectorHRoad implements RoadState, Serializable {
 
     @Override
     public RoadState removeDown() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (lastState == null) ? new HRoadUp(null) : lastState;
     }
 
     @Override
     public RoadState removeLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (lastState == null) ? new VRoadUp(null) : lastState;
     }
 
     @Override
@@ -64,5 +65,4 @@ public class ConnectorHRoad implements RoadState, Serializable {
     public boolean isCriticalArea() {
         return false;
     }
-
 }

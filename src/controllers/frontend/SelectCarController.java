@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import model.Car;
 import util.Settings.SpritesCars;
 import util.Settings.Scenes;
 
@@ -46,8 +47,9 @@ public class SelectCarController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.loadImages();
-        this.selectedCar = SpritesCars.JAGUAR;
+        this.selectedCar = SpritesCars.values()[0];
         this.imgRealCar.setImage(new Image(selectedCar.getBig()));
+        this.lblCarName.setText(selectedCar.name());
         btnNext.setDisable(false);
     }
 
@@ -85,8 +87,9 @@ public class SelectCarController implements Initializable {
     @FXML
     private void setNextScreen(ActionEvent event) {
         try {
-            FacadeBackend.getInstance().setCar(selectedCar);
-            FacadeFrontend.getInstance().changeScreean(Scenes.SELECT_CITY);
+            Car car = FacadeBackend.getInstance().createCar(selectedCar);
+            FacadeBackend.getInstance().setMainCar(car);
+            FacadeFrontend.getInstance().changeScreenAndSetController(Scenes.ROADS);
         } catch (Exception ex) {
             Logger.getLogger(SelectCarController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -95,7 +98,7 @@ public class SelectCarController implements Initializable {
     @FXML
     private void setPreviousScreen(ActionEvent event) {
         try {
-            FacadeFrontend.getInstance().changeScreean(Scenes.MAIN);
+            FacadeFrontend.getInstance().changeScreean(Scenes.SELECT_CITY);
         } catch (Exception ex) {
             Logger.getLogger(SelectCarController.class.getName()).log(Level.SEVERE, null, ex);
         }

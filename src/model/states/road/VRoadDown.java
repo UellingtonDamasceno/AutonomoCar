@@ -1,18 +1,24 @@
-package model.states;
+package model.states.road;
 
 import java.io.Serializable;
 import util.RoadState;
+import util.Settings.RoadTypes;
 
 /**
  *
  * @author uellington
  */
-public class VRoadUp implements RoadState, Serializable {
+public class VRoadDown implements RoadState, Serializable {
 
     private RoadState lastState;
 
-    protected VRoadUp(RoadState lastState) {
+    public VRoadDown(RoadState lastState) {
         this.lastState = lastState;
+    }
+
+    @Override
+    public RoadTypes getType() {
+        return RoadTypes.VERTICAL;
     }
 
     @Override
@@ -27,22 +33,22 @@ public class VRoadUp implements RoadState, Serializable {
 
     @Override
     public RoadState putLeft() {
-        return new TrunLeftInverse(this);
+        return new TrunLeft(this);
     }
 
     @Override
     public RoadState putRight() {
-        return new TrunRightInverse(this);
+        return new TrunRight(this);
     }
 
     @Override
     public RoadState removeUp() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (lastState == null) ? new Single() : lastState;
     }
 
     @Override
     public RoadState removeDown() {
-        return (lastState == null) ? new Single() : lastState;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -56,12 +62,8 @@ public class VRoadUp implements RoadState, Serializable {
     }
 
     @Override
-    public String getType() {
-        return "VRoadUp";
-    }
-
-    @Override
     public boolean isCriticalArea() {
         return false;
     }
+
 }

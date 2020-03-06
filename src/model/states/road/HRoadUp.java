@@ -1,38 +1,46 @@
-package model.states;
+package model.states.road;
 
 import java.io.Serializable;
+import java.util.List;
 import util.RoadState;
+import util.Settings;
+import util.Settings.RoadTypes;
 
 /**
  *
  * @author uellington
  */
-public class TrunRight implements RoadState, Serializable {
+public class HRoadUp implements RoadState, Serializable {
 
     private RoadState lastState;
 
-    public TrunRight(RoadState lastState) {
+    public HRoadUp(RoadState lastState) {
         this.lastState = lastState;
     }
 
     @Override
+    public RoadTypes getType() {
+        return RoadTypes.HORIZONTAL;
+    }
+
+    @Override
     public RoadState putUp() {
-        return new TRightRoad(this);
+        return new TrunLeftInverse(this);
     }
 
     @Override
     public RoadState putDown() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new TrunLeft(this);
     }
 
     @Override
     public RoadState putLeft() {
-        return new TRoad(this);
+        return new ConnectorHRoad(this);
     }
 
     @Override
     public RoadState putRight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ConnectorHRoad(this);
     }
 
     @Override
@@ -42,22 +50,17 @@ public class TrunRight implements RoadState, Serializable {
 
     @Override
     public RoadState removeDown() {
-        return (lastState == null) ? new HRoadUp(null) : lastState;
-    }
-
-    @Override
-    public RoadState removeLeft() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public RoadState removeRight() {
-        return (lastState == null) ? new VRoadUp(null) : lastState;
+    public RoadState removeLeft() {
+        return (lastState == null) ? new Single() : lastState;
     }
 
     @Override
-    public String getType() {
-        return "TrunRight";
+    public RoadState removeRight() {
+        return (lastState == null) ? new Single() : lastState;
     }
 
     @Override

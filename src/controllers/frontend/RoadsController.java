@@ -2,7 +2,10 @@ package controllers.frontend;
 
 import facade.FacadeBackend;
 import facade.FacadeFrontend;
+import java.io.IOException;
+import java.net.SocketException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -22,10 +25,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import model.Car;
 import model.Road;
+import model.Sector;
 import model.Vertex;
+import model.exceptions.EdgeNotExistException;
+import model.exceptions.OfflineException;
 import model.exceptions.VertexNotExistException;
 import org.json.JSONObject;
 import util.Point;
@@ -52,6 +59,7 @@ public class RoadsController implements Initializable, Observer {
     @FXML
     private BorderPane root;
     private Circle carFrontend;
+    private boolean initialized;
 
     /**
      * Initializes the controller class.
@@ -73,7 +81,7 @@ public class RoadsController implements Initializable, Observer {
         this.cars = new HashMap<>();
         this.carFrontend = new Circle(8);
         this.carFrontend.setFill(FacadeBackend.getInstance().getSelectedCar().getColor());
-
+        this.initialized = false;
         this.render();
     }
 
@@ -116,69 +124,89 @@ public class RoadsController implements Initializable, Observer {
 
     @FXML
     private void pushCar(MouseEvent event) throws VertexNotExistException {
+        if (!this.initialized) {
+            int spawnX = (int) (event.getX() / this.heigth);
+            int spawnY = (int) (event.getY() / this.width);
 
-        int spawnX = (int) (event.getX() / this.heigth);
-        int spawnY = (int) (event.getY() / this.width);
+            if (FacadeBackend.getInstance().getCity().isRoad(spawnX, spawnY)) {
+                Road road = FacadeBackend.getInstance().getCity().getRoad(spawnX, spawnY);
+                if (!road.isCriticalArea()) {
 
-        if (FacadeBackend.getInstance().getCity().isRoad(spawnX, spawnY)) {
-            Road road = FacadeBackend.getInstance().getCity().getRoad(spawnX, spawnY);
-            if (!road.isCriticalArea()) {
-                Car selectedCar = FacadeBackend.getInstance().getSelectedCar();
+                    Point clickedPoint = new Point(event.getX(), event.getY());
 
-                Point spawnPoint = this.getStartPoint(event, road);
+                    Sector sector = road.getNearestSector(clickedPoint);
+                    Vertex<Sector> vertex = FacadeBackend.getInstance().getCity().getGraph().getVertex(sector);
 
-                Vertex vertex = FacadeBackend.getInstance().getCity().getGraph().getVertex(road);
-
-                selectedCar.setOriginVertex(vertex);
-                selectedCar.setOriginPoint(spawnPoint);
-
-                selectedCar.initialize();
-                if (this.gridPane.getChildren().contains(carFrontend)) {
-                    this.bindPoint(selectedCar.getCurrentPosition());
+                    Point spawnPoint = new Point();
+                    spawnPoint.setY(sector.getPoint().getDoublePropertyY().get() - 50);
+                    spawnPoint.setX(sector.getPoint().getDoublePropertyX().get() - 5);
+                    Car selectedCar = FacadeBackend.getInstance().getSelectedCar();
+                    try {
+                        selectedCar.initialize(vertex, spawnPoint);
+                        this.initialized = true;
+//                    System.out.println("Ip da maquina: " + selectedCar.getId());
+                    } catch (EdgeNotExistException ex) {
+                        System.err.println("Erro ao inicializar o carro!");
+                    } catch (SocketException ex) {
+                        Logger.getLogger(RoadsController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (UnknownHostException | VertexNotExistException | OfflineException ex) {
+                        Logger.getLogger(RoadsController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(RoadsController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    if (!this.gridPane.getChildren().contains(carFrontend)) {
+                        this.bindPoint(carFrontend, selectedCar.getCurrentPosition());
+                        this.gridPane.getChildren().add(carFrontend);
+                    }
                 } else {
-                    this.bindPoint(selectedCar.getCurrentPosition());
-                    this.gridPane.getChildren().add(carFrontend);
+                    System.err.println("Não é possivel por o carro em uma zona critica!");
                 }
             } else {
-                System.err.println("Não é possivel por o carro em uma zona critica!");
-            }
-        } else {
-            System.err.println("Não é uma rua");
-        }
-
-    }
-
-    private Point getStartPoint(MouseEvent event, Road road) {
-        Point clickedPoint = new Point(event.getX(), event.getY());
-        Point spawnPoint = new Point();
-
-        double distanceMax = Double.MAX_VALUE;
-        double calculateDistance;
-
-        for (Point sectorRoad : road.getSectors()) {
-            calculateDistance = Point.distance(clickedPoint, sectorRoad);
-            if (calculateDistance < distanceMax) {
-                spawnPoint = new Point(sectorRoad.getX().get(), sectorRoad.getY().get() - 50);
-                distanceMax = calculateDistance;
+                System.err.println("Não é uma rua");
             }
         }
-        return spawnPoint;
     }
 
-    private void bindPoint(Point position) {
+    public void showNewCar(String id, Point point, SpritesCars sprite) {
         Platform.runLater(() -> {
-            carFrontend.centerXProperty().bind(position.getX());
-            carFrontend.centerYProperty().bind(position.getY());
-            carFrontend.translateXProperty().bind(position.getX());
-            carFrontend.translateYProperty().bind(position.getY());
+            Color color = sprite.getColor();
+            Circle circle = new Circle(point.getX(), point.getY(), 8, color);
+            this.cars.put(id, circle);
+            this.bindPoint(circle, point);
+            this.gridPane.getChildren().add(circle);
         });
+    }
 
+    public void removeCar(String id) {
+        Circle removed = this.cars.remove(id);
+        Platform.runLater(() -> {
+            this.gridPane.getChildren().remove(removed);
+            removed.translateXProperty().unbind();
+            removed.translateYProperty().unbind();
+        });
+    }
+
+    public void startAll() {
+//        this.cars.values().forEach((car) -> {
+//            try {
+//                car.start();
+//            } catch (IOException | OfflineException ex) {
+//                Logger.getLogger(RoadsController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        });
+    }
+
+    private void bindPoint(Circle car, Point point) {
+        Platform.runLater(() -> {
+            car.translateXProperty().bind(point.getDoublePropertyX());
+            car.translateYProperty().bind(point.getDoublePropertyY());
+        });
     }
 
     @FXML
     private void previous(ActionEvent event) {
         try {
-            FacadeBackend.getInstance().getSelectedCar().setStop(true);
+            FacadeBackend.getInstance().getSelectedCar().setStop(false);
             FacadeFrontend.getInstance().changeScreean(Scenes.SELECT_CITY);
         } catch (Exception ex) {
             Logger.getLogger(RoadsController.class.getName()).log(Level.SEVERE, null, ex);
@@ -197,13 +225,13 @@ public class RoadsController implements Initializable, Observer {
 
                 Circle circle = new Circle(x, y, 5, SpritesCars.getColor(color));
 //                this.bindPoint(position);;
-                this.cars.put(ip, circle);
+//                this.cars.put(ip, circle);
                 break;
             }
             case "DELETE/CAR": {
                 String ip = request.getString("ip");
-                Circle remove = this.cars.remove(ip);
-                
+//                Car remove = this.cars.remove(ip);
+
                 System.out.println("Carro removido!");
             }
         }
@@ -211,12 +239,16 @@ public class RoadsController implements Initializable, Observer {
 
     @FXML
     private void start(ActionEvent event) {
-        FacadeBackend.getInstance().getSelectedCar().start();
+        try {
+            FacadeBackend.getInstance().getSelectedCar().start();
+        } catch (IOException | OfflineException ex) {
+            Logger.getLogger(RoadsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
     private void stop(ActionEvent event) {
-        FacadeBackend.getInstance().getSelectedCar().setStop(true);
+        FacadeBackend.getInstance().getSelectedCar().setStop(false);
     }
 
 }

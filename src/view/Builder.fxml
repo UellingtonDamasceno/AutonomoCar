@@ -151,6 +151,8 @@
                      </children>
                   </VBox>
                   <Label fx:id="lblAdjacentSize" text="Adjacent: " />
+                  <Label fx:id="lblDirection" text="Sector Orientation" />
+                  <Label fx:id="lblOppositeDirection" text="Opposite direction" />
                   <Label fx:id="lblRoadType" text="Type: " />
                   <Label fx:id="lblp1" text="Type: " />
                   <Label fx:id="lblp2" text="Type: " />

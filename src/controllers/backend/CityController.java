@@ -5,8 +5,7 @@ import java.util.logging.Logger;
 import model.City;
 import model.NullRoad;
 import model.Road;
-import model.Transition;
-import model.Vertex;
+import model.Sector;
 import model.exceptions.EdgeExistException;
 import model.exceptions.VertexEqualsException;
 import model.exceptions.VertexNotExistException;
@@ -56,11 +55,19 @@ public class CityController {
     }
 
     public void createCity(String name, int dx, int dy, int h, int w, int propotion) {
-//        if ((dx % propotion == 0) && (dy % propotion == 0)) {
         this.city = new City(name, dx, dy, h, w);
-//        }else{
-//            System.out.println("CityController > createCity:: propoção invalida!");
-//        }
+    }
+
+    public void connectPoints(Road origin, Road destiny, int os, int sdq, Orientation orientation) {
+        if (!(origin instanceof NullRoad) && !(destiny instanceof NullRoad)) {
+            try {
+                this.city.getGraph().put(origin.getSector(os), destiny.getSector(sdq), orientation);
+            } catch (VertexEqualsException ex) {
+                Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (EdgeExistException ex) {
+                Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public Road putRoad(String sprite, int x, int y) {
@@ -74,65 +81,62 @@ public class CityController {
             this.city.setRoad(road, x, y);
 
             Road top = city.getRoad(x, y - 1);
-            Road buttom = city.getRoad(x, y + 1);
+            Road below = city.getRoad(x, y + 1);
             Road right = city.getRoad(x + 1, y);
             Road left = city.getRoad(x - 1, y);
+
+            this.updateState(road, top, Orientation.NORTH);
+            this.connectPoints(road, top, 1, 3, Orientation.NORTH);
+
+            this.updateState(top, road, Orientation.SOUTH);
+            this.connectPoints(top, road, 2, 0, Orientation.SOUTH);
+
+            this.updateState(road, right, Orientation.EAST);
+            this.connectPoints(road, right, 3, 2, Orientation.EAST);
+
+            this.updateState(right, road, Orientation.WEST);
+            this.connectPoints(right, road, 0, 1, Orientation.WEST);
+
+            this.updateState(road, left, Orientation.WEST);
+            this.connectPoints(road, left, 0, 1, Orientation.WEST);
+            this.connectPoints(road, road, 1, 0, Orientation.WEST);
+
+            this.updateState(left, road, Orientation.EAST);
+            this.connectPoints(left, road, 3, 2, Orientation.EAST);
+            this.connectPoints(road, road, 2, 3, Orientation.EAST);
+
+            this.updateState(road, below, Orientation.SOUTH);
+            this.connectPoints(road, below, 2, 0, Orientation.SOUTH);
+            this.connectPoints(road, road, 0, 2, Orientation.SOUTH);
+
+            this.updateState(below, road, Orientation.NORTH);
+            this.connectPoints(below, road, 1, 3, Orientation.NORTH);
+            this.connectPoints(road, road, 3, 1, Orientation.NORTH);
             
-            Transition northSouth = new Transition(Orientation.NORTH, top.getSector(3));
-            Transition southNorth = new Transition(Orientation.SOUTH, road.getSector(0));
-            Transition eastWest = new Transition(Orientation.EAST, road.getSector(2));
-            Transition westEast = new Transition(Orientation.WEST, road.getSector(1));
-            
-            Transition iEastWest = new Transition(Orientation.WEST, left.getSector(1));
-            Transition iWestEast = new Transition(Orientation.EAST, road.getSector(2));
-            Transition iSouthNorth = new Transition(Orientation.SOUTH, buttom.getSector(0));
-            Transition iNorthSouth = new Transition(Orientation.NORTH, road.getSector(3));
-            
-            this.connectRoads(road, top, northSouth);
-            this.connectRoads(top, road, southNorth);
-            
-            this.connectRoads(road, right, eastWest);
-            this.connectRoads(right, road, westEast);
-            
-            this.connectRoads(road, left, iEastWest);
-            this.connectRoads(left, road, iWestEast);
-            
-            this.connectRoads(road, buttom, iSouthNorth);
-            this.connectRoads(buttom, road, iNorthSouth);
         }
 
         return road;
     }
 
-    private void connectRoads(Road de, Road para, Transition transition) {
-        try {
-            if (!(para instanceof NullRoad) && !(de instanceof NullRoad)) {
-                this.city.connectRoads(de, para, transition);
-                switch (transition.getOrientation()) {
-                    case NORTH: {
-                        de.putUp();
-                        break;
-                    }
-                    case SOUTH: {
-                        de.putDown();
-                        break;
-                    }
-                    case EAST: {
-                        de.putRight();
-                        break;
-                    }
-                    case WEST: {
-                        de.putLeft();
-                        break;
-                    }
+    private void updateState(Road origin, Road destiny, Orientation orientation) {
+        if (!(destiny instanceof NullRoad) && !(origin instanceof NullRoad)) {
+            switch (orientation) {
+                case NORTH: {
+                    origin.putUp();
+                    break;
                 }
-            }
-        } catch (VertexEqualsException | EdgeExistException e) {
-            System.out.println("Deu erro!");
-            try {
-                this.city.updateRoad(de, para);
-            } catch (VertexNotExistException ex1) {
-                Logger.getLogger(CityController.class.getName()).log(Level.SEVERE, null, ex1);
+                case SOUTH: {
+                    origin.putDown();
+                    break;
+                }
+                case EAST: {
+                    origin.putRight();
+                    break;
+                }
+                case WEST: {
+                    origin.putLeft();
+                    break;
+                }
             }
         }
 
@@ -164,26 +168,25 @@ public class CityController {
         double x = (propotionX * offsetX);
         double y = (propotionY * offsetY);
 
-        coordX = ((propotionX / 4) + x) + 5;
+        coordX = ((propotionX / 4) + x) + 10;
         coordY = ((propotionY / 4) + y) + 10;
-        Point p1 = new Point(coordX, coordY);
+        Point p1 = new Point(coordX, coordY, 0);
 
         coordX = ((3 * (propotionX / 4)) + x) - 10;
         coordY = ((propotionY / 4) + y) + 10;
-        Point p2 = new Point(coordX, coordY);
+        Point p2 = new Point(coordX, coordY, 1);
 
-        coordX = ((propotionX / 4) + x) + 5;
-        coordY = ((3 * (propotionY / 4)) + y) - 13;
-        Point p3 = new Point(coordX, coordY);
+        coordX = ((propotionX / 4) + x) + 10;
+        coordY = ((3 * (propotionY / 4)) + y) - 10;
+        Point p3 = new Point(coordX, coordY, 2);
 
-    
         coordX = (((3 * propotionX) / 4) + x) - 10;
-        coordY = (((3 * propotionY) / 4) + y) - 13;
-        Point p4 = new Point(coordX, coordY);
+        coordY = (((3 * propotionY) / 4) + y) - 10;
+        Point p4 = new Point(coordX, coordY, 3);
 
-        road.setSectorPoint(0, p1);
-        road.setSectorPoint(1, p2);
-        road.setSectorPoint(2, p3);
-        road.setSectorPoint(3, p4);
+        road.setSectorPoint(0, new Sector(0, p1));
+        road.setSectorPoint(1, new Sector(1, p2));
+        road.setSectorPoint(2, new Sector(2, p3));
+        road.setSectorPoint(3, new Sector(3, p4));
     }
 }

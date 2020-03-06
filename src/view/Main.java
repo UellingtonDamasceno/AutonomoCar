@@ -2,12 +2,10 @@ package view;
 
 import facade.FacadeBackend;
 import facade.FacadeFrontend;
-import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import model.Car;
 import util.Settings.Scenes;
 
 /**

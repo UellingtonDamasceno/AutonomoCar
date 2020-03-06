@@ -1,23 +1,29 @@
-package model.states;
+package model.states.road;
 
 import java.io.Serializable;
 import util.RoadState;
+import util.Settings;
 
 /**
  *
  * @author uellington
  */
-public class TLeftRoad implements RoadState, Serializable {
+public class TrunRight implements RoadState, Serializable {
 
     private RoadState lastState;
 
-    protected TLeftRoad(RoadState lastState) {
+    public TrunRight(RoadState lastState) {
         this.lastState = lastState;
     }
 
+        @Override
+    public Settings.RoadTypes getType() {
+        return Settings.RoadTypes.L_UP_RIGHT;
+    }
+    
     @Override
     public RoadState putUp() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new TRightRoad(this);
     }
 
     @Override
@@ -27,41 +33,36 @@ public class TLeftRoad implements RoadState, Serializable {
 
     @Override
     public RoadState putLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new TRoad(this);
     }
 
     @Override
     public RoadState putRight() {
-        return new XRoad(this);
-    }
-
-    @Override
-    public RoadState removeUp() {
-        return (lastState == null) ? new TrunLeft(null) : lastState;
-    }
-
-    @Override
-    public RoadState removeDown() {
-        return (lastState == null) ? new TrunLeftInverse(null) : lastState;
-    }
-
-    @Override
-    public RoadState removeLeft() {
-        return (lastState == null) ? new VRoadUp(null) : lastState;
-    }
-
-    @Override
-    public RoadState removeRight() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public String getType() {
-        return "TLeftRoad";
+    public RoadState removeUp() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public RoadState removeDown() {
+        return (lastState == null) ? new HRoadUp(null) : lastState;
+    }
+
+    @Override
+    public RoadState removeLeft() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public RoadState removeRight() {
+        return (lastState == null) ? new VRoadUp(null) : lastState;
     }
 
     @Override
     public boolean isCriticalArea() {
-        return true;
+        return false;
     }
 }

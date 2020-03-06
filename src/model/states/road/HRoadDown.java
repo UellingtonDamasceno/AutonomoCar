@@ -3,46 +3,54 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.states;
+package model.states.road;
 
 import java.io.Serializable;
+import java.util.List;
 import util.RoadState;
+import util.Settings;
+import util.Settings.RoadTypes;
 
 /**
  *
  * @author uellington
  */
-public class TrunLeftInverse implements RoadState, Serializable {
+public class HRoadDown implements RoadState, Serializable {
 
     private RoadState lastState;
 
-    public TrunLeftInverse(RoadState lastState) {
+    public HRoadDown(RoadState lastState) {
         this.lastState = lastState;
     }
 
     @Override
+    public RoadTypes getType() {
+        return RoadTypes.HORIZONTAL;
+    }
+    
+    @Override
     public RoadState putUp() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new TrunRightInverse(this);
     }
 
     @Override
     public RoadState putDown() {
-        return new TLeftRoad(this);
+        return new TrunRight(this);
     }
 
     @Override
     public RoadState putLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ConnectorHRoad(this);
     }
 
     @Override
     public RoadState putRight() {
-        return new TRoadInverse(this);
+        return new ConnectorHRoad(this);
     }
 
     @Override
     public RoadState removeUp() {
-        return (lastState == null) ? new HRoadUp(null) : lastState;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -52,17 +60,12 @@ public class TrunLeftInverse implements RoadState, Serializable {
 
     @Override
     public RoadState removeLeft() {
-        return (lastState == null) ? new VRoadDown(null) : lastState;
+        return (lastState == null) ? new Single() : lastState;
     }
 
     @Override
     public RoadState removeRight() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getType() {
-        return "TrunLeftInverse";
     }
 
     @Override

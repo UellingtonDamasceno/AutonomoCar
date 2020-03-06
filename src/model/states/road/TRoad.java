@@ -1,23 +1,29 @@
-package model.states;
+package model.states.road;
 
 import java.io.Serializable;
 import util.RoadState;
+import util.Settings.RoadTypes;
 
 /**
  *
  * @author uellington
  */
-public class TrunLeft implements RoadState, Serializable {
+public class TRoad implements RoadState, Serializable {
 
     private RoadState lastState;
 
-    protected TrunLeft(RoadState lastState) {
+    public TRoad(RoadState lastState) {
         this.lastState = lastState;
     }
 
     @Override
+    public RoadTypes getType() {
+        return RoadTypes.T;
+    }
+
+    @Override
     public RoadState putUp() {
-        return new TLeftRoad(this);
+        return new XRoad(this);
     }
 
     @Override
@@ -32,7 +38,7 @@ public class TrunLeft implements RoadState, Serializable {
 
     @Override
     public RoadState putRight() {
-        return new TRoad(this);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -47,21 +53,16 @@ public class TrunLeft implements RoadState, Serializable {
 
     @Override
     public RoadState removeLeft() {
-        return (lastState == null) ? new VRoadUp(null) : lastState;
+        return (lastState == null) ? new TrunRight(null) : lastState;
     }
 
     @Override
     public RoadState removeRight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getType() {
-        return "TrunLeft";
+        return (lastState == null) ? new TrunLeft(null) : lastState;
     }
 
     @Override
     public boolean isCriticalArea() {
-        return false;
+        return true;
     }
 }

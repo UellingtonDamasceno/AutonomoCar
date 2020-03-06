@@ -3,10 +3,11 @@ package model;
 import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
-import model.states.Single;
+import model.states.road.Single;
 import org.json.JSONObject;
 import util.Point;
 import util.RoadState;
+import util.Settings.RoadTypes;
 
 /**
  *
@@ -14,29 +15,28 @@ import util.RoadState;
  */
 public class Road implements Observer, Serializable {
 
-    private String sprite;
+    protected String sprite;
 
-    private RoadState state;
-    private final int positionX, positionY;
-    private final double height, width;
-    private Point[] sectorPoints;
-    
-    
+    protected RoadState state;
+    protected Sector[] sectors;
+
+    protected final int positionX, positionY;
+    protected final double height, width;
+
     public Road(String sprite, int posX, int posY, double h, double w) {
         this.sprite = sprite;
         this.positionX = posX;
         this.positionY = posY;
         this.height = h;
         this.width = w;
+        this.sectors = new Sector[4];
         this.state = new Single();
-        this.sectorPoints = new Point[4];
     }
 
-    public boolean isCriticalArea(){
+    public boolean isCriticalArea() {
         return this.state.isCriticalArea();
     }
 
-    
     public double getHeight() {
         return height;
     }
@@ -49,7 +49,7 @@ public class Road implements Observer, Serializable {
         return this.sprite;
     }
 
-    public String getType() {
+    public RoadTypes getType() {
         return this.state.getType();
     }
 
@@ -64,53 +64,51 @@ public class Road implements Observer, Serializable {
     public void setSprite(String sprite) {
         this.sprite = sprite;
     }
-    
+
     public void putUp() {
         this.state = this.state.putUp();
+        this.updateOrientations();
     }
 
     public void putDown() {
         this.state = this.state.putDown();
+        this.updateOrientations();
     }
 
     public void putLeft() {
         this.state = this.state.putLeft();
+        this.updateOrientations();
     }
 
     public void putRight() {
         this.state = this.state.putRight();
+        this.updateOrientations();
+
     }
 
-    public void removeUp() {
-        this.state = this.state.removeUp();
+    public Sector getNearestSector(Point point) {
+        Point nearestPoint = Point.distance(point, this.getSectorPoints());
+        return this.sectors[nearestPoint.getSector()];
     }
 
-    public void removeDown() {
-        this.state = this.state.removeDown();
+    public void setSectorPoint(int position, Sector sector) {
+        this.sectors[position] = sector;
     }
 
-    public void removeLeft() {
-        this.state = this.state.removeLeft();
+    public Sector[] getSectors() {
+        return this.sectors;
     }
 
-    public void removeRight() {
-        this.state = this.state.removeRight();
+    public Sector getSector(int position) {
+        return this.sectors[position];
     }
 
-    public void setSectorPoint(Point[] points){
-        this.sectorPoints = points;
-    }
-    
-    public void setSectorPoint(int position, Point point) {
-        this.sectorPoints[position] = point;
-    }
-
-    public Point[] getSectors() {
-        return this.sectorPoints;
-    }
-    
-    public Point getSector(int position){
-        return this.sectorPoints[position];
+    public Point[] getSectorPoints() {
+        Point[] points = new Point[sectors.length];
+        for (int i = 0; i < sectors.length; i++) {
+            points[i] = sectors[i].getPoint();
+        }
+        return points;
     }
 
     @Override
@@ -155,10 +153,17 @@ public class Road implements Observer, Serializable {
 //        jsonObject.accumulate("dimension", jsonArray);
         return jsonObject.toString();
     }
-    
-    public void load(){
-        for (Point sectorPoint : sectorPoints) {
-            sectorPoint.load();
+
+    public void load() {
+        for (Sector sector : sectors) {
+            sector.getPoint().load();
+        }
+    }
+
+    private void updateOrientations() {
+        for (int i = 0; i < sectors.length; i++) {
+            sectors[i].setStartOrientation(this.getType().getOrientation(i));
+            sectors[i].setIsCritical(this.state.isCriticalArea());
         }
     }
 }

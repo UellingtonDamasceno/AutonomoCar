@@ -3,10 +3,10 @@ package model;
 import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
-import model.exceptions.EdgeExistException;
-import model.exceptions.VertexEqualsException;
 import model.exceptions.VertexNotExistException;
 import org.json.JSONObject;
+import util.Point;
+import util.Settings.Orientation;
 
 /**
  *
@@ -16,11 +16,11 @@ public class City implements Serializable, Observer {
 
     private final String name;
 
-    private int dx, dy;
-    private double height, width;
-    private double propotionX, propotionY;
+    private final int dx, dy;
+    private final double height, width;
+    private final double propotionX, propotionY;
     private Road[][] city;
-    private Graph<Road, Transition> graph;
+    private Graph<Sector, Orientation> graph;
 
     public City(String name, int dx, int dy, double h, double w) {
         this.name = name;
@@ -86,7 +86,7 @@ public class City implements Serializable, Observer {
     public Road getRoad(int x, int y) {
         return (x >= dx || x < 0 || y >= dy || y < 0) ? new NullRoad(x, y) : this.city[x][y];
     }
-
+    
     public boolean isEmpty(int x, int y) {
         return this.city[x][y] instanceof NullRoad;
     }
@@ -95,6 +95,15 @@ public class City implements Serializable, Observer {
         return !(this.getRoad(x, y) instanceof NullRoad);
     }
 
+    public Road getRoad(Point point){
+        int x = (int) ((point.getX()) / this.width);
+        int y = (int) ((point.getY()) / this.height);
+        
+        System.out.println("O ponto: "+ point);
+        System.out.println("Pertence a rua de coord: X " + x + " Y: "+ y);
+        return this.getRoad(x, y);
+    }
+    
     public double calculateRoadHeight(int posY) {
         return this.propotionY * (posY) + 1;
     }
@@ -103,13 +112,7 @@ public class City implements Serializable, Observer {
         return this.propotionX * (posX + 1);
     }
 
-    public void connectRoads(Road a, Road b, Transition t) throws VertexEqualsException, EdgeExistException {
-        graph.put(a, b, t);
-        Edge edge = this.graph.getEdge(a, b);
-        System.out.println(edge);
-    }
-
-    public void updateRoad(Road a, Road b) throws VertexNotExistException {
+    public void updateRoad(Sector a, Sector b) throws VertexNotExistException {
         this.graph.update(b, a);
     }
 

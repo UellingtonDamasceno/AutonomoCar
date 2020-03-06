@@ -1,12 +1,14 @@
 package util;
 
+import util.Settings.RoadTypes;
+
 /**
  *
  * @author uellington
  */
 public interface RoadState {
     
-    public String getType();
+    public RoadTypes getType();
     
     public RoadState putUp();
     public RoadState putDown();

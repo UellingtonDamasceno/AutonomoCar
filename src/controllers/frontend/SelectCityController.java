@@ -36,7 +36,7 @@ public class SelectCityController implements Initializable {
     @FXML
     private void previous(ActionEvent event) {
         try {
-            FacadeFrontend.getInstance().changeScreean(Scenes.SELECT_CAR);
+            FacadeFrontend.getInstance().changeScreean(Scenes.MAIN);
         } catch (Exception ex) {
             Logger.getLogger(SelectCityController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -55,7 +55,7 @@ public class SelectCityController implements Initializable {
     private void next(ActionEvent event) {
         try {
             FacadeBackend.getInstance().loadCity(cbSelectCity.getSelectionModel().getSelectedItem());
-            FacadeFrontend.getInstance().changeScreean(Scenes.ROADS);
+            FacadeFrontend.getInstance().changeScreean(Scenes.SELECT_CAR);
         } catch (Exception ex) {
             Logger.getLogger(SelectCityController.class.getName()).log(Level.SEVERE, null, ex);
         }

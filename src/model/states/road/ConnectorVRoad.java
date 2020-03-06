@@ -1,43 +1,56 @@
-package model.states;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package model.states.road;
 
 import java.io.Serializable;
+import java.util.List;
 import util.RoadState;
+import util.Settings;
+import util.Settings.RoadTypes;
 
 /**
  *
  * @author uellington
  */
-public class TrunRightInverse implements RoadState, Serializable {
+public class ConnectorVRoad implements RoadState, Serializable {
 
     private RoadState lastState;
 
-    public TrunRightInverse(RoadState lastState) {
+    public ConnectorVRoad(RoadState lastState) {
         this.lastState = lastState;
     }
 
     @Override
+    public RoadTypes getType() {
+        return RoadTypes.VERTICAL;
+    }
+
+    @Override
     public RoadState putUp() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ConnectorVRoad(this);
     }
 
     @Override
     public RoadState putDown() {
-        return new TRightRoad(this);
+        return new ConnectorVRoad(this);
     }
 
     @Override
     public RoadState putLeft() {
-        return new TRoadInverse(this);
+        return new TLeftRoad(this);
     }
 
     @Override
     public RoadState putRight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new TRightRoad(this);
     }
 
     @Override
     public RoadState removeUp() {
-        return (lastState == null) ? new HRoadDown(null) : lastState;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -52,12 +65,7 @@ public class TrunRightInverse implements RoadState, Serializable {
 
     @Override
     public RoadState removeRight() {
-        return (lastState == null) ? new VRoadDown(null) : lastState;
-    }
-
-    @Override
-    public String getType() {
-        return "TrunRightInverse";
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
